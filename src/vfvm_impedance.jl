@@ -47,6 +47,7 @@ $(SIGNATURES)
 Construct impedance system from time domain system `sys` and steady state solution `U0`
 """
 function ImpedanceSystem(system::AbstractSystem{Tv, Tc, Ti}, U0::AbstractMatrix; λ0 = 0.0) where {Tv, Tc, Ti}
+    U0=solutionarray(U0)
     residual = copy(U0)
 
     if system.num_parameters > 0

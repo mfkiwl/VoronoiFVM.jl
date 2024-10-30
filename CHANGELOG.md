@@ -1,12 +1,20 @@
 # Changes
-## 2024-10-28
-
-Moved repositiory from https://github.com/j-fu/VoronoiFVM.jl to https://github.com/WIAS-PDELib/VoronoiFVM.jl. [WIAS-PDELib](https://github.com/WIAS-PDELib/) is a github organization created to collectively manage the Julia packages developed under the lead of the [WIAS Numerical Mathematics and Scientific Computing](https://wias-berlin.de/research/rgs/fg3)  research group. According to the [github docs on repository transfer](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository#whats-transferred-with-a-repository), all links to the previous repository location are automatically redirected to the new location, and all relationships with forks stay intact.
 
 ## v3.0 Planned  (pending some improvements in LinearSolve)
   - use `precs` based linear solver API, see https://github.com/SciML/LinearSolve.jl/pull/514
   - stop re-exporting ForwardDiff.value
   - try to remove type piracies
+  - remove `params` from edge, node structs (appearantly never used)
+
+## v2.2.0 October 30, 2024
+  - Add `params` to SystemState, allow to pass params to ODEProblem
+  - Fix use of end results of time evolution as steady state for impedance calculations
+  - new internal solutionarray method. 
+
+## October 28, 2024
+
+Moved repositiory from https://github.com/j-fu/VoronoiFVM.jl to https://github.com/WIAS-PDELib/VoronoiFVM.jl. [WIAS-PDELib](https://github.com/WIAS-PDELib/) is a github organization created to collectively manage the Julia packages developed under the lead of the [WIAS Numerical Mathematics and Scientific Computing](https://wias-berlin.de/research/rgs/fg3)  research group. According to the [github docs on repository transfer](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository#whats-transferred-with-a-repository), all links to the previous repository location are automatically redirected to the new location, and all relationships with forks stay intact.
+
 ## v2.1.0 October 23, 2024
   - Features:
     - Add VoronoiFVMExtendableFEMBaseExt  extension allowing to use velocity fields caculated  with [ExtendableFEM](https://github.com/chmerdon/ExtendableFEM.jl) in convection-diffusion problems

@@ -72,6 +72,7 @@ abstract type AbstractSolutionArray{T,N} <: AbstractArray{T,N} end
 Base.getindex(a::AbstractSolutionArray, i::Int, j::Int)= getindex(a.u,i,j )
 Base.setindex!(a::AbstractSolutionArray,v, i::Int, j::Int) = setindex!(a.u,v,i,j)
 Base.size(a::AbstractSolutionArray)=size(a.u)
+solutionarray(a::AbstractSolutionArray)=a
 
 export AbstractSolutionArray
 
