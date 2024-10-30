@@ -13,7 +13,7 @@ Type parameters:
 Type fields:
 $(TYPEDFIELDS)
 """
-mutable struct SystemState{Tv, TMatrix<:AbstractMatrix{Tv}, TSolArray<:AbstractMatrix{Tv}, TData}
+mutable struct SystemState{Tv, Tp, TMatrix<:AbstractMatrix{Tv}, TSolArray<:AbstractMatrix{Tv}, TData}
 
     """
     Related finite volume system
@@ -21,7 +21,7 @@ mutable struct SystemState{Tv, TMatrix<:AbstractMatrix{Tv}, TSolArray<:AbstractM
     system::VoronoiFVM.System
 
     """
-    Parameter data 
+    User data 
     """
     data::TData
 
@@ -56,6 +56,11 @@ mutable struct SystemState{Tv, TMatrix<:AbstractMatrix{Tv}, TSolArray<:AbstractM
     linear_cache::Union{Nothing, LinearSolve.LinearCache}
 
     """
+    Parameter vector
+    """
+    params::Vector{Tp}
+    
+    """
     Hash value of latest unknowns vector the assembly was called with
     (used by differential equation interface)
     """
@@ -85,9 +90,14 @@ Keyword arguments:
 """
 function SystemState(::Type{Tu}, system::AbstractSystem{Tv, Tc, Ti, Tm};
                      data=system.physics.data,
+                     params=zeros(system.num_parameters),
                      matrixtype=system.matrixtype) where {Tu,Tv,Tc, Ti, Tm}
     _complete!(system)
-
+    
+    if (length(params)!=system.num_parameters)
+        error("length(params)!=system.num_parameters")
+    end
+    
     nspec = size(system.node_dof, 1)
     n = num_dof(system)
 
@@ -123,7 +133,7 @@ function SystemState(::Type{Tu}, system::AbstractSystem{Tv, Tc, Ti, Tm};
     residual = unknowns(Tu, system)
     update = unknowns(Tu, system)
     dudp = [unknowns(Tu, system) for i = 1:(system.num_parameters)]
-    SystemState(system, data, solution, matrix, dudp, residual, update, nothing, zero(UInt64),  nothing)
+    SystemState(system, data, solution, matrix, dudp, residual, update, nothing, params, zero(UInt64),  nothing)
 end
 
 
@@ -154,7 +164,8 @@ function Base.similar(state::SystemState; data=state.data)
     residual=similar(state.residual)
     update=similar(state.update)
     linear_cache=nothing
+    params=similar(state.params)
     uhash=zero(UInt64)
     history=nothing
-    SystemState(system, data, solution, matrix, dudp, residual, update, linear_cache, uhash, history)
+    SystemState(system, data, solution, matrix, dudp, residual, update, linear_cache, params, uhash, history)
 end

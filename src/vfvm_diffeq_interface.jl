@@ -9,7 +9,7 @@ function _eval_res_jac!(state, u, t)
     uhash = hash(u)
     if uhash != state.uhash
         ur = reshape(u, state.system)
-        eval_and_assemble(state.system, ur, ur, state.residual, state.matrix, state.dudp, value(t), Inf, 0.0, state.system.physics.data, zeros(0))
+        eval_and_assemble(state.system, ur, ur, state.residual, state.matrix, state.dudp, value(t), Inf, 0.0, state.system.physics.data, state.params)
         state.uhash = uhash
         state.history.nd += 1
     end
@@ -151,7 +151,9 @@ for more documentation.
 
 Defined in VoronoiFVM.jl.
 """
-function SciMLBase.ODEProblem(state::VoronoiFVM.SystemState, inival, tspan; callback = SciMLBase.CallbackSet())
+function SciMLBase.ODEProblem(state::VoronoiFVM.SystemState, inival, tspan;
+                              params=state.params, callback = SciMLBase.CallbackSet())
+    state.params.=params
     odefunction = SciMLBase.ODEFunction(state; jacval = dofs(inival), tjac = tspan[1])
     SciMLBase.ODEProblem(odefunction, dofs(inival), tspan, state, callback)
 end
@@ -174,7 +176,10 @@ by [solve()](https://diffeq.sciml.ai/stable/basics/common_solver_opts/).
 
 Defined in VoronoiFVM.jl.
 """
-SciMLBase.ODEProblem(sys::VoronoiFVM.System, inival, tspan;kwargs...)=SciMLBase.ODEProblem(SystemState(sys), inival, tspan; kwargs...)
+function SciMLBase.ODEProblem(sys::VoronoiFVM.System, inival, tspan;
+                              params=zeros(sys.num_parameters), kwargs...)
+    SciMLBase.ODEProblem(SystemState(sys), inival, tspan; params, kwargs...)
+end
 
 """
     reshape(ode_solution, system; times=nothing, state=nothing)

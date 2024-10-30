@@ -486,7 +486,6 @@ function CommonSolve.solve!(state::VoronoiFVM.SystemState;
                             tstep = Inf,
                             kwargs...,)
     fix_deprecations!(control)
-    
     if isa(inival, Number) || isa(inival, Matrix) 
         inival = unknowns(state.system; inival = inival)
     elseif !isdensesystem(state.system) && isa(inival, SparseMatrixCSC)
@@ -506,6 +505,8 @@ function CommonSolve.solve!(state::VoronoiFVM.SystemState;
     if !isnothing(data)
         state.data=data
     end
+    state.params.=params
+    
 
     if haskey(kwargs, :times) && !isnothing(kwargs[:times])
         solve_transient!(state,
