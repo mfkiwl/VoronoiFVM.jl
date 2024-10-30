@@ -55,7 +55,7 @@ Base.getindex(p::DParameters, i) = @inbounds p.val[p.offset + i]
 Return abstract vector of parameters passed via vector of unknonws. 
 This allows differentiation with respect to these parameters.
 """
-function parameters(u::AbstractNodeData{Tv}) where {Tv <: Number}
+function parameters(u::AbstractNodeData)
     DParameters(u.val, u.nspec)
 end
 
@@ -80,7 +80,7 @@ abstract type AbstractEdgeData{Tv <: Number} <: AbstractMatrix{Tv} end
 Base.size(u::AbstractEdgeData) = (u.n1, 2)
 Base.getindex(u::AbstractEdgeData, i, j) = @inbounds u.val[(j - 1) * u.n1 + i]
 
-function parameters(u::AbstractEdgeData{Tv}) where {Tv <: Number}
+function parameters(u::AbstractEdgeData)
     DParameters(u.val, u.n1 + u.n1)
 end
 
@@ -139,7 +139,7 @@ mutable struct Node{Tc, Tp, Ti} <: AbstractNode{Tc, Tp, Ti}
     embedparam::Float64
 
     """
-    parameters
+    parameters (deprecated)
     """
     params::Vector{Tp}
 
@@ -258,6 +258,9 @@ mutable struct BNode{Tv, Tc, Tp, Ti} <: AbstractNode{Tc, Tp, Ti}
     """
     embedparam::Float64
 
+    """
+    Parameters (deprecated)
+    """
     params::Vector{Tp}
 
     dirichlet_value::Vector{Tv}
@@ -356,6 +359,9 @@ mutable struct Edge{Tc, Tp, Ti} <: AbstractEdge{Tc, Tp, Ti}
     """
     embedparam::Float64
 
+    """
+    Parameters (deprecated)
+    """
     params::Vector{Tp}
 
     """
@@ -519,6 +525,9 @@ mutable struct BEdge{Tc, Tp, Ti} <: AbstractEdge{Tc, Tp, Ti}
     """
     embedparam::Float64
 
+    """
+    Parameters (deprecated)
+    """
     params::Vector{Tp}
 
     fac::Float64
