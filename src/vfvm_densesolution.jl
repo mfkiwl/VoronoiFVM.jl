@@ -22,6 +22,11 @@ end
 DenseSolutionArray(u::Matrix{T}) where {T} =DenseSolutionArray{T,2}(u,nothing)
 
 """
+    solutionarray(a::Matrix)
+"""
+solutionarray(u::Matrix{T}) where {T} =DenseSolutionArray{T,2}(u,nothing)
+
+"""
  $(TYPEDSIGNATURES)
     
 `DenseSolutionArray` constructor.

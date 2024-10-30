@@ -121,6 +121,7 @@ prepare_diffeq!
 
 ## Misc tools
 ```@docs
+VoronoiFVM.solutionarray
 VoronoiFVM.integrate(::Type{<:Cartesian2D}, coordl, coordr, hnormal, velofunc; kwargs...)
 VoronoiFVM.integrate(::Type{<:Cylindrical2D}, coordl, coordr, hnormal, velofunc; kwargs...)
 VoronoiFVM.doolittle_ludecomp!

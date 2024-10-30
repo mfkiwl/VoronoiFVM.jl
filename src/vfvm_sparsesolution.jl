@@ -28,6 +28,10 @@ end
 """
 SparseSolutionArray(a::SparseMatrixCSC{Tv,Ti}) where {Tv,Ti}=SparseSolutionArray{Tv,2,Ti}(a,nothing)
 
+"""
+    solutionarray(a::SparseMatrixCSC)
+"""
+solutionarray(a::SparseMatrixCSC{Tv,Ti}) where {Tv,Ti}=SparseSolutionArray{Tv,2,Ti}(a,nothing)
 
 """
 $(TYPEDEF)
