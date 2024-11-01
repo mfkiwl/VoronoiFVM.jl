@@ -29,7 +29,7 @@ ramp
 These are characterized by the `boutflow` physics callback and 
 and the `outflowboundaries` keyword argument in the system
 resp. physics constructor. See also the 
-[corresponding notebook](https://j-fu.github.io/VoronoiFVM.jl/dev/nbhtml/outflow/)
+[corresponding notebook](https://WIAS-PDELib.github.io/VoronoiFVM.jl/dev/nbhtml/outflow/)
 
 ```@docs
 hasoutflownode

@@ -32,7 +32,7 @@ end;
 # ╔═╡ 5e13b3db-570c-4159-939a-7e2268f0a102
 md"""
 # Some problems with Voronoi FVM
-[Source](https://github.com/j-fu/VoronoiFVM.jl/blob/master/pluto-examples/problemcase.jl)
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/problemcase.jl)
 
 Draft. J. Fuhrmann, Oct. 29. 2021. Updated Dec 19, 2021.
 

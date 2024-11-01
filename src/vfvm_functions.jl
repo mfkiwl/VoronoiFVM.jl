@@ -44,7 +44,7 @@ it's derivative calculated via `ForwardDiff.jl` is not,
 so we use the polynomial approximation in the  
 interval `(-bernoulli_small_threshold, bernoulli_small_threshold)`. 
 
-Also, see the discussion in [#117](https://github.com/j-fu/VoronoiFVM.jl/issues/117).
+Also, see the discussion in [#117](https://github.com/WIAS-PDELib/VoronoiFVM.jl/issues/117).
 """
 function fbernoulli(x)
     if x < -bernoulli_large_threshold

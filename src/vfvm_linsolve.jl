@@ -35,22 +35,22 @@ Currently available strategies are:
 Notable LU Factorizations/direct solvers are:
 - [`UMFPACKFactorization`](https://docs.sciml.ai/LinearSolve/stable/solvers/solvers/#SuiteSparse.jl)  (`using LinearSolve`)
 - [`KLUFactorization`](https://docs.sciml.ai/LinearSolve/stable/solvers/solvers/#SuiteSparse.jl) (`using LinearSolve`)
-- [`SparspakFactorization`](https://docs.sciml.ai/LinearSolve/stable/solvers/solvers/#Sparspak.jl)  (`using LinearSolve`), [`SparspakLU`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.SparspakLU) (`using ExtendableSparse,Sparspak`)
-- [`MKLPardisoLU`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.MKLPardisoLU) (`using ExtendableSparse, Pardiso`), openmp parallel
+- [`SparspakFactorization`](https://docs.sciml.ai/LinearSolve/stable/solvers/solvers/#Sparspak.jl)  (`using LinearSolve`), [`SparspakLU`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.SparspakLU) (`using ExtendableSparse,Sparspak`)
+- [`MKLPardisoLU`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.MKLPardisoLU) (`using ExtendableSparse, Pardiso`), openmp parallel
 - [`AMGSolver`](https://j-fu.github.io/AMGCLWrap.jl/stable/solvers/#AMGCLWrap.AMGSolver) (`using AMGCLWrap`), openmp parallel
 - [`RLXSolver`](https://j-fu.github.io/AMGCLWrap.jl/stable/solvers/#AMGCLWrap.RLXSolver) (`using AMGCLWrap`), openmp parallel
 
 
 Notable incomplete factorizations/preconditioners
 - Incomplete LU factorizations written in Julia:
-    - [`ILUZeroPreconditioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.ILUZeroPreconditioner)
-    - [`ILUTPrecondidtioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.ILUTPreconditioner) (`using ExtendableSparse, IncompleteLU`)
+    - [`ILUZeroPreconditioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.ILUZeroPreconditioner)
+    - [`ILUTPrecondidtioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.ILUTPreconditioner) (`using ExtendableSparse, IncompleteLU`)
 - Algebraic multigrid written in Julia: (`using ExtendableSparse, AlgebraicMultigrid`)
-    - [`RS_AMGPreconditioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.RS_AMGPreconditioner)
-    - [`SA_AMGPreconditioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.SA_AMGPreconditioner)
+    - [`RS_AMGPreconditioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.RS_AMGPreconditioner)
+    - [`SA_AMGPreconditioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.SA_AMGPreconditioner)
 - AMGCL based preconditioners (`using ExtendableSparse, AMGCLWrap`), openmp parallel
-    - [`AMGCL_AMGPreconditioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.AMGCL_AMGPreconditioner)
-    - [`AMGCL_RLXPreconditioner`](https://j-fu.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.AMGCL_RLXPreconditioner)
+    - [`AMGCL_AMGPreconditioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.AMGCL_AMGPreconditioner)
+    - [`AMGCL_RLXPreconditioner`](https://WIAS-PDELib.github.io/ExtendableSparse.jl/stable/iter/#ExtendableSparse.AMGCL_RLXPreconditioner)
 
 Blocking strategies are:
 - [`NoBlock`](@ref)

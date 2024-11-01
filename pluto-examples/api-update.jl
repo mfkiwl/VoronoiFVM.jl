@@ -37,7 +37,7 @@ end;
 md"""
 # API updates 
 
-[Source](https://github.com/j-fu/VoronoiFVM.jl/blob/master/pluto-examples/api-updates.jl)
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/api-updates.jl)
 """
 
 # ╔═╡ 3e6b4ffa-7b33-4b94-9fd6-75b030d5a115

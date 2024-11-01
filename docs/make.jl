@@ -79,7 +79,7 @@ function make(; with_examples = true,
              clean = false,
              doctest = false,
              authors = "J. Fuhrmann",
-             repo = "https://github.com/j-fu/VoronoiFVM.jl",
+             repo = "https://github.com/WIAS-PDELib/VoronoiFVM.jl",
              format = Documenter.HTML(; size_threshold_ignore,
                                        assets=String["assets/citations.css"],
                                       mathengine = MathJax3()),
@@ -89,7 +89,7 @@ function make(; with_examples = true,
     cleanexamples()
 
     if !isinteractive()
-        deploydocs(; repo = "github.com/j-fu/VoronoiFVM.jl.git")
+        deploydocs(; repo = "github.com/WIAS-PDELib/VoronoiFVM.jl.git")
     end
 end
 

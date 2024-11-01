@@ -2,7 +2,7 @@
 
 ## Plotting
 
-Plotting can be performed using the package [GridVisualize.jl](https://github.com/j-fu/GridVisualize.jl).
+Plotting can be performed using the package [GridVisualize.jl](https://github.com/WIAS-PDELib/GridVisualize.jl).
 This package extends the API with a couple of methods:
     
 ```@docs

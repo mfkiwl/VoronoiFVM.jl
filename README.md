@@ -17,15 +17,15 @@ It uses automatic differentiation via [ForwardDiff.jl](https://github.com/JuliaD
 Please look up the list of recent [changes](https://WIAS-PDELib.github.io/VoronoiFVM.jl/stable/changes)
 
 ## Accompanying packages
-- [ExtendableSparse.jl](https://github.com/j-fu/ExtendableSparse.jl): convenient and efficient sparse matrix assembly
-- [ExtendableGrids.jl](https://github.com/j-fu/ExtendableGrids.jl): unstructured grid management library
-- [SimplexGridFactory.jl](https://github.com/j-fu/SimplexGridFactory.jl): unified high level  mesh generator interface
+- [ExtendableSparse.jl](https://github.com/WIAS-PDELib/ExtendableSparse.jl): convenient and efficient sparse matrix assembly
+- [ExtendableGrids.jl](https://github.com/WIAS-PDELib/ExtendableGrids.jl): unstructured grid management library
+- [SimplexGridFactory.jl](https://github.com/WIAS-PDELib/SimplexGridFactory.jl): unified high level  mesh generator interface
 - [Triangulate.jl](https://github.com/JuliaGeometry/Triangulate.jl):  Julia wrapper for the [Triangle](https://www.cs.cmu.edu/~quake/triangle.html) triangle mesh generator by J. Shewchuk
 - [TetGen.jl](https://github.com/JuliaGeometry/TetGen.jl):  Julia wrapper for the [TetGen](http://www.tetgen.org) tetrahedral mesh generator by H. Si.
-- [GridVisualize.jl](https://github.com/j-fu/GridVisualize.jl): grid and function visualization related to ExtendableGrids.jl
-- [PlutoVista.jl](https://github.com/j-fu/PlutoVista.jl): backend for [GridVisualize.jl](https://github.com/j-fu/GridVisualize.jl) for use in Pluto notebooks.
+- [GridVisualize.jl](https://github.com/WIAS-PDELib/GridVisualize.jl): grid and function visualization related to ExtendableGrids.jl
+- [PlutoVista.jl](https://github.com/j-fu/PlutoVista.jl): backend for [GridVisualize.jl](https://github.com/WIAS-PDELib/GridVisualize.jl) for use in Pluto notebooks.
 
-VoronoiFVM.jl and most of these packages are  part of the meta package [PDELib.jl](https://github.com/WIAS-BERLIN/PDELib.jl).
+VoronoiFVM.jl and most of these packages are  part of the meta package [PDELib.jl](https://github.com/WIAS-PDELib/PDELib.jl).
 
 
 
@@ -49,4 +49,4 @@ VoronoiFVM.jl and most of these packages are  part of the meta package [PDELib.j
 
 ## Citation
 
-If you use this package in your work, please cite it according to [CITATION.cff](https://raw.githubusercontent.com/j-fu/VoronoiFVM.jl/master/CITATION.cff)
+If you use this package in your work, please cite it according to [CITATION.cff](https://raw.githubusercontent.com/WIAS-PDELib/VoronoiFVM.jl/master/CITATION.cff)

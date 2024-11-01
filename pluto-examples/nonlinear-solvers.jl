@@ -23,7 +23,7 @@ end;
 # ╔═╡ 4ed0c302-26e4-468a-a40d-0e6406f802d0
 md"""
 # Nonlinear solver control
-[Source](https://github.com/j-fu/VoronoiFVM.jl/blob/master/pluto-examples/nonlinear-solvers.jl)
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/nonlinear-solvers.jl)
 
 """
 

@@ -54,7 +54,7 @@ md"""
 # ╔═╡ 32eca884-3ed2-4b03-b2d9-871e00e4c0b1
 md"""
 How to model and simulate heterogeneous catalysis with [Catalyst.jl](http://github.com/SciML/Catalyst.jl)
-and [VoronoiFVM.jl](https://github.com/j-fu/VoronoiFVM.jl).
+and [VoronoiFVM.jl](https://github.com/WIAS-PDELib/VoronoiFVM.jl).
 """
 
 # ╔═╡ c8462f8e-9618-489e-9e02-7e2316c0e621

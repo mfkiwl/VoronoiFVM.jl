@@ -1,6 +1,5 @@
 cff-version: 1.2.0
-title: "VoronoiFVM.jl - Finite volume solver for coupled nonlinear partial d
-ifferential equations"
+title: "VoronoiFVM.jl - Finite volume solver for coupled nonlinear partial differential equations"
 abstract: "Solution of nonlinear multiphysics partial differential equation systems using the Voronoi finite volume method"
 message: "If you use this software, please cite it using the  metadata from this file."
 type: software
@@ -26,4 +25,4 @@ authors:
     family-names: Liero
 doi: "10.5281/zenodo.3529808"
 license: MIT
-repository-code: "https://github.com/j-fu/VoronoiFVM.jl"
+repository-code: "https://github.com/WIAS-PDELib/VoronoiFVM.jl"

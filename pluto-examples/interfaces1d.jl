@@ -28,7 +28,7 @@ TableOfContents(; title = "", aside = false)
 # ╔═╡ 3fa189e4-9e1c-470c-bf26-15b631945d2d
 md"""
 # Interface conditions in 1D
-[Source](https://github.com/j-fu/VoronoiFVM.jl/blob/master/pluto-examples/interfaces1d.jl)
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/interfaces1d.jl)
 
 This notebooks discusses handling of internal interfaces with VoronoiFVM.jl.
 

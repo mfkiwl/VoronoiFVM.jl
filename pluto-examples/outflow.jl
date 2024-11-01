@@ -24,7 +24,7 @@ end
 md"""
 # Outflow boundary conditions
 
-[Source](https://github.com/j-fu/VoronoiFVM.jl/blob/master/pluto-examples/outflow.jl)
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/outflow.jl)
 """
 
 # ╔═╡ 0d1b7d24-4dc7-4f1d-944f-e279e18f151c

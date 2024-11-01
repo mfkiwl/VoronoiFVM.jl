@@ -3,8 +3,8 @@
 The computational grid required is assumed to correspond to a domain
 ``\Omega=\cup_{r=1}^{n_\Omega} \Omega_r`` 
 
-Grids for VoronoiFVM are managed by the packages [ExtendableGrids.jl](https://github.com/j-fu/ExtendableGrids.jl)
-and [SimplexGridFactory.jl](https://github.com/j-fu/SimplexGridFactory.jl)
+Grids for VoronoiFVM are managed by the packages [ExtendableGrids.jl](https://github.com/WIAS-PDELib/ExtendableGrids.jl)
+and [SimplexGridFactory.jl](https://github.com/WIAS-PDELib/SimplexGridFactory.jl)
 
 
 with boundary  ``\partial\Omega=\Gamma=\cup_{b=1}^{n_\Gamma} \Gamma_b``.
