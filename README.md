@@ -42,7 +42,7 @@ VoronoiFVM.jl and most of these packages are  part of the meta package [PDELib.j
 ## Some projects and packages using VoronoiFVM.jl
 
 - [MultiComponentReactiveMixtureProject: Model for heat and multi-component, reactive gas phase transport in porous media.](https://github.com/DavidBrust/MultiComponentReactiveMixtureProject)
-- [RfbScFVM: Performance prediction of flow battery vells](https://github.com/Isomorph-Electrochemical-Cells/RfbScFVM)
+- [RfbScFVM: Performance prediction of flow battery cells](https://github.com/Isomorph-Electrochemical-Cells/RfbScFVM)
 - [ChargeTransport.jl: Drift diffusion simulator for semiconductor devices](https://github.com/PatricioFarrell/ChargeTransport.jl)
 - [MosLab.jl: From semiconductor to transistor level modeling in Julia](https://github.com/Rapos0/MOSLab.jl)
 - [LiquidElectrolytes.jl: Generalized Nernst-Planck-Poisson model for liquid electrolytes](https://github.com/j-fu/LiquidElectrolytes.jl)
