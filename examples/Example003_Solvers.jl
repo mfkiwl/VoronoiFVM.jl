@@ -13,19 +13,15 @@ using ExtendableGrids
 using GridVisualize
 using LinearSolve
 using ExtendableSparse
+using ExtendableSparse: ILUZeroPreconBuilder, JacobiPreconBuilder, SmoothedAggregationPreconBuilder
 using SparseArrays
 using AMGCLWrap
 using AlgebraicMultigrid
 using LinearAlgebra
 
-using ILUZero
+
 using Test
 
-struct ILUZeroPreconBuilder end
-(::ILUZeroPreconBuilder)(A,p)=(ilu0(A),I)
-
-struct SmoothedAggregationBuilder end
-(::SmoothedAggregationBuilder)(A,p)= (aspreconditioner(smoothed_aggregation(SparseMatrixCSC(A), Val{1})),I)
 
 function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     h = 1.0 / convert(Float64, n)
@@ -91,7 +87,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     @test norm(sol - umf_sol, Inf)<1.0e-7
 
     @info "Krylov-block1"
-    precs=EquationBlockPrecs(;precs=ILUZeroPreconBuilder(), partitioning= A->  [1:(size(A,1) ÷ 2), (size(A,1) ÷ 2 + 1):size(A,1)])
+    precs=BlockPreconBuilder(;precs=ILUZeroPreconBuilder(), partitioning= A->  [1:(size(A,1) ÷ 2), (size(A,1) ÷ 2 + 1):size(A,1)])
     sol = solve(sys;
                 inival = 0.5,
                 method_linear = KrylovJL_BICGSTAB(;precs),
@@ -99,7 +95,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     @test norm(sol - umf_sol, Inf)<1.0e-7
 
     @info "Krylov-block2"
-    precs=EquationBlockPrecs(;precs=ILUZeroPreconBuilder(), partitioning= A->   [1:2:size(A,1), 2:2:size(A,1)])
+    precs=BlockPreconBuilder(;precs=ILUZeroPreconBuilder(), partitioning= A->   [1:2:size(A,1), 2:2:size(A,1)])
     sol = solve(sys;
                 inival = 0.5,
                 method_linear = KrylovJL_BICGSTAB(;precs),
@@ -110,7 +106,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     @info "Krylov - delayed factorization:"
     sol = solve(sys;
                 inival = 0.5,
-                method_linear = KrylovJL_BICGSTAB(;precs=SparspakPrecs()),
+                method_linear = KrylovJL_BICGSTAB(;precs=LinearSolvePreconBuilder(SparspakFactorization())),
                 keepcurrent_linear =false,
                 log=true,
                 kwargs...)
@@ -120,7 +116,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     @info "Krylov - jacobi:"
     sol = solve(sys;
                 inival = 0.5,
-                method_linear = KrylovJL_BICGSTAB(;precs=JacobiPrecs()),
+                method_linear = KrylovJL_BICGSTAB(;precs=JacobiPreconBuilder()),
                 keepcurrent_linear = true, log=true,
                 kwargs...)
     @test norm(sol - umf_sol, Inf)<1.0e-7
@@ -129,7 +125,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
     @info "Krylov - SA_AMG:"
     sol = solve(sys;
                 inival = 0.5,
-                method_linear = KrylovJL_BICGSTAB(;precs=SmoothedAggregationBuilder()),
+                method_linear = KrylovJL_BICGSTAB(;precs=SmoothedAggregationPreconBuilder()),
                 keepcurrent_linear = true,
                 kwargs...)
     @test norm(sol - umf_sol, Inf)<1.0e-7
@@ -142,7 +138,7 @@ function main(; n = 10, Plotter = nothing, assembly = :edgwwise, kwargs...)
                 kwargs...)
     @test norm(sol - umf_sol, Inf)<1.0e-7
 
-    @info "Krylov - AMGCL_RLX:"
+    @info "Krylov - AMGnCL_RLX:"
     sol = solve(sys;
                 inival = 0.5,
                 method_linear = KrylovJL_BICGSTAB(;precs=RLXPreconBuilder()),
