@@ -6,7 +6,7 @@
   - Try to remove type piracies
   - Remove `params` from edge, node structs (appearantly never used)
 
-## v2.4.0 November 10, 2024
+## v2.4.0 November 11, 2024
   - Use `precs` based linear solver API, see https://github.com/SciML/LinearSolve.jl/pull/514 with  ExtendableSparse 1.6
   - Deprecate VoronoiFVM solver strategies
 
