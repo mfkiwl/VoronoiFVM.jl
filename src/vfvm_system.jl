@@ -1070,9 +1070,11 @@ Equationwise partitioning mode.
 struct Equationwise end
 
 """
-    $(SIGNATURES)
+    partitioning(system, mode)
 
-Calculate partitioning of system unknowns.
+Calculate partitioning of system unknowns to be used in block preconditioners.
+Possible modes:
+- [`Equationwise`](@ref)()
 """
 function partitioning(system::DenseSystem, ::Equationwise)
     len = length(system.node_dof)

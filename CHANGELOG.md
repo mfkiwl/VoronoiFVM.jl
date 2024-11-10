@@ -1,10 +1,18 @@
 # Changes
 
 ## v3.0 Planned  (pending some improvements in LinearSolve)
-  - use `precs` based linear solver API, see https://github.com/SciML/LinearSolve.jl/pull/514
-  - stop re-exporting ForwardDiff.value
-  - try to remove type piracies
-  - remove `params` from edge, node structs (appearantly never used)
+  - Remove VoronoiFVM solver strategies
+  - Stop re-exporting ForwardDiff.value
+  - Try to remove type piracies
+  - Remove `params` from edge, node structs (appearantly never used)
+
+## v2.4.0 November 11, 2024
+  - Use `precs` based linear solver API, see https://github.com/SciML/LinearSolve.jl/pull/514 with  ExtendableSparse 1.6
+  - Deprecate VoronoiFVM solver strategies
+
+## v2.3.0 November 5, 2024
+  - Allow to use result of time embedding a steady state for impedance
+  - Move to WIAS-PDELib org
 
 ## v2.2.0 October 30, 2024
   - Add `params` to SystemState, allow to pass params to ODEProblem

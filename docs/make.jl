@@ -9,7 +9,7 @@ function make(; with_examples = true,
               with_notebooks = true)
 
     bib = CitationBibliography(
-        joinpath(@__DIR__, "src", "citations.bib");
+        joinpath(@__DIR__, "..", "CITATIONS.bib");
         style=:numeric
     )
     

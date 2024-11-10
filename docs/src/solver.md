@@ -18,7 +18,7 @@ Overview:
 - [Solve method](@ref "Solve method")
 - [Solver control](@ref "Solver control")
 - [System state](@ref "System state")
-- [Linear solver stragies](@ref "Linear solver strategies")
+- [Linear solver control](@ref "Linear solver control")
 - [Block preconditioning](@ref "Block preconditioning")
 - [History handling](@ref "History handling")
 - [Matrix extraction](@ref "Matrix extraction")
@@ -42,26 +42,20 @@ VoronoiFVM.solve!(state::VoronoiFVM.SystemState; kwargs...)
 Base.similar(state::VoronoiFVM.SystemState; kwargs...)
 ```
 
-### Linear solver strategies
-```@docs
-VoronoiFVM.LinearSolverStrategy
-DirectSolver
-CGIteration
-BICGstabIteration
-GMRESIteration
-```
+### Linear solver control
+Linear systems are solved using LinearSolve.jl. 
+Linear solve compatible solver strategies (factorizations, iterative solvers) can be
+specified wia  `method_linear` keyword argument to LinearSolve (equivalent to the `method_linear` 
+entry of [`SolverControl`](@ref).
 
-### Block preconditioning
-This feature is under development as of 1.6.
+Currently supported possibilities are documented in the
+[documentation of ExtendableSparse.jl](https://wias-pdelib.github.io/ExtendableSparse.jl/stable/linearsolve/#Solving-with-LinearSolve.jl).
+
+VoronoiFVM.jl provides partitioning methods for block preconditioners.
 ```@docs
-VoronoiFVM.BlockStrategy
-NoBlock
-EquationBlock
-PointBlock
 Equationwise
 partitioning
 ```
-
 
 
 ### History handling
@@ -147,5 +141,23 @@ are supported for backward compatibility.
 NewtonControl
 ``` 
 
+## Deprecated API
+The methods and struct in this section are deprecated as of version 2.4 and will be removed in version 3.
+### Linear solver strategies
+```@docs
+VoronoiFVM.LinearSolverStrategy
+DirectSolver
+CGIteration
+BICGstabIteration
+GMRESIteration
+```
 
+### Block preconditioning
+
+```@docs
+VoronoiFVM.BlockStrategy
+NoBlock
+EquationBlock
+PointBlock
+```
 

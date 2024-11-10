@@ -1,7 +1,9 @@
-################################################
+
+# Deprecated. TODO: remove with v3.0
 const FactorizationStrategy = Union{Nothing, Function, Type, ExtendableSparse.AbstractFactorization,
                                     LinearSolve.AbstractFactorization, LinearSolve.SciMLLinearSolveAlgorithm}
 
+## Deprecated. TODO: remove with v3.0
 struct Identity end
 Identity(A) = Identity()
 LinearAlgebra.ldiv!(u, I::Identity, v) = u .= v
@@ -10,15 +12,12 @@ LinearAlgebra.ldiv!(I::Identity, u) = nothing
 """
     SolverControl
     SolverControl(;kwargs...)
-    SolverControl(linear_solver_strategy, sys; kwargs...)
 
 Solver control parameter for time stepping, embedding, Newton method and linear solver control.
 All field names can be used as keyword arguments for [`solve(system::VoronoiFVM.AbstractSystem; kwargs...)`](@ref)
 
 Newton's method solves ``F(u)=0`` by the iterative procedure ``u_{i+1}=u_{i} - d_i F'(u_i)^{-1}F(u_i)``
 starting with some initial value ``u_0``, where ``d_i`` is a damping parameter.
-
-For linear solver strategies, see [`VoronoiFVM.LinearSolverStrategy`](@ref).
 
 $(TYPEDFIELDS)
 """
@@ -139,6 +138,7 @@ Base.@kwdef mutable struct SolverControl
 
     """
     Update preconditioner in each Newton step ?
+    Translates to `reuse_precs=!keepcurrent_linear` for LinearSolve.
     """
     keepcurrent_linear::Bool = false
 
