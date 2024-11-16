@@ -996,13 +996,14 @@ function _initialize_inactive_dof!(U::DenseSolutionArray, system::DenseSystem)
 end
 
 function Base.show(io::IO, sys::AbstractSystem)
-    str = @sprintf("%s(num_species=%d)", typeof(sys), num_species(sys))
-    println(io, str)
+    str = "$(typeof(sys))(\n grid = $(sys.grid),\n  physics = $(sys.physics),\n  num_species = $(num_species(sys)))"
+    sz=displaysize(io)
+    print_wrapped(io, str; replace_whitespace=false, subsequent_indent="  ", width=sz[2])
 end
 
 #####################################################
-has_generic_operator(sys::AbstractSystem) = sys.physics.generic_operator != nofunc_generic
-has_generic_operator_sparsity(sys::AbstractSystem) = sys.physics.generic_operator_sparsity != nofunc_generic_sparsity
+has_generic_operator(sys::AbstractSystem) = sys.physics.generic_operator != nofunc
+has_generic_operator_sparsity(sys::AbstractSystem) = sys.physics.generic_operator_sparsity != nofunc
 
 ##################################################################
 """
