@@ -59,20 +59,11 @@ Re-exported from ForwardDiff.
 #
 # Dummy callbacks
 #
-function nofunc(f, u, node, data=nothing)
-end
+function nofunc(args...) end
 
-function nosrc(f, node, data=nothing)
-end
 
-function default_storage(f, u, node, data=nothing)
+function default_storage(f, u, node, data)
     f .= u
-end
-
-function nofunc_generic(f, u, sys)
-end
-
-function nofunc_generic_sparsity(sys)
 end
 
 
@@ -200,7 +191,7 @@ mutable struct Physics{Flux <: Function,
     data::Data
 
     """
-    Number of species including boundary species.
+    Number of species including boundary species. Meaningless & deprecated.
     """
     num_species::Int8
 end
@@ -236,15 +227,15 @@ function Physics(; num_species = 0,
                  reaction::Function = nofunc,
                  edgereaction::Function = nofunc,
                  storage::Function = default_storage,
-                 source::Function = nosrc,
+                 source::Function = nofunc,
                  bflux::Function = nofunc,
                  breaction::Function = nofunc,
-                 bsource::Function = nosrc,
+                 bsource::Function = nofunc,
                  bstorage::Function = nofunc,
                  boutflow::Function = nofunc,
                  outflowboundaries::Vector{Int} = Int[],
-                 generic::Function = nofunc_generic,
-                 generic_sparsity::Function = nofunc_generic_sparsity,
+                 generic::Function = nofunc,
+                 generic_sparsity::Function = nofunc,
                  kwargs...)
     return Physics(flux,
                    storage,
@@ -296,23 +287,27 @@ $(SIGNATURES)
 Show physics object
 """
 function Base.show(io::IO, physics::AbstractPhysics)
-    str = @sprintf("VoronoiFVM.Physics(num_species=%d", physics.num_species)
+    str = "Physics("
     if isdata(physics.data)
-        str = str * ", data=$(typeof(physics.data))"
+        str = str * "data=$(typeof(physics.data)), "
     end
-    function addfunc(func, name)
-        if func != nofunc
-            str = str * ", $(name)=$(nameof(func))"
-        end
-    end
-
+        
+    # function addfunc(func, name)
+    #     if func != nofunc
+    #         str = str * ", $(name)=$(nameof(func))"
+    #     end
+    # end
+        
     for name in fieldnames(typeof(physics))
-        if (name != :num_species) && (name != :data) && getfield(physics, name) != nofunc
-            str = str * ", $(name)=$(nameof(getfield(physics,name)))"
+        if (name != :num_species) && (name != :data)  && (name != :outflowboundaries)  && getfield(physics, name) != nofunc
+            str = str * "$(name)=$(nameof(getfield(physics,name))), "
         end
+    end
+    if length(physics.outflowboundaries)>0
+        str=str * "outflowboundaries=$(physics.outflowboundaries)"
     end
     str = str * ")"
-    println(io, str)
+    print(io, str)
 end
 
 """
