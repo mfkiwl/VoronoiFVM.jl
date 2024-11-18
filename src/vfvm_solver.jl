@@ -256,23 +256,27 @@ function solve_transient!(state,
     solution = copy(inival)
     oldsolution = copy(inival) # we need a copy as it is later overwritten
 
-    # Initialize Dirichlet boundary values
-    _initialize_dirichlet!(solution, state.system; time, λ = Float64(lambdas[1]), params)
-    
-    # If not transient, solve for first embedding lambdas[1]
-    t0 = @elapsed if !transient
+    t0 = 0.0
+    if transient
+        # Initialize transient solution struct
+        tsol = TransientSolution(Float64(lambdas[1]), copy(solution); in_memory = control.in_memory)
+        # Initialize Dirichlet boundary values
+        _initialize_dirichlet!(solution, state.system; time, λ = Float64(lambdas[1]), params)
+    else
+        # If not transient, solve for first embedding lambdas[1]
+        _initialize_dirichlet!(solution, state.system; time, λ = Float64(lambdas[1]), params)
         control.pre(solution, Float64(lambdas[1]))
-        solution = solve_step!(state,
-                               solution,
-                               oldsolution,
-                               control,
-                               time,
-                               Inf,
-                               Float64(lambdas[1]),
-                               params)
-
+        t0 = @elapsed solution = solve_step!(state,
+                                             solution,
+                                             oldsolution,
+                                             control,
+                                             time,
+                                             Inf,
+                                             Float64(lambdas[1]),
+                                             params)
+        
         control.post(solution, oldsolution, lambdas[1], 0)
-
+        
         if control.log
             push!(allhistory, solution.history)
             push!(allhistory.times, lambdas[1])
@@ -280,10 +284,10 @@ function solve_transient!(state,
             push!(allhistory.updates, Δu)
         end
         oldsolution .= solution
+
+        tsol = TransientSolution(Float64(lambdas[1]), copy(solution); in_memory = control.in_memory)
     end
 
-    # Initialize transient solution struct
-    tsol = TransientSolution(Float64(lambdas[1]), copy(solution); in_memory = control.in_memory)
 
     if doprint(control, 'e')
         println("[e]volution: start in $(extrema(lambdas))")
