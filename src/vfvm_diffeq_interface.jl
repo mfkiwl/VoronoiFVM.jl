@@ -130,7 +130,7 @@ end
     
 Create an [ODEFunction](https://diffeq.sciml.ai/stable/basics/overview/#Defining-Problems)
 in [mass matrix form](https://diffeq.sciml.ai/stable/solvers/dae_solve/#OrdinaryDiffEq.jl-(Mass-Matrix))
-to be handeled by ODE solvers from [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl).
+to be handled by ODE solvers from [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl).
 
 Parameters:
 - `system`: A [`VoronoiFVM.System`](https://WIAS-PDELib.github.io/VoronoiFVM.jl/stable/system/#VoronoiFVM.System-Tuple{ExtendableGrid})
@@ -163,7 +163,7 @@ end
     
 Create an [ODEProblem](https://diffeq.sciml.ai/stable/basics/overview/#Defining-Problems)
 in [mass matrix form](https://diffeq.sciml.ai/stable/solvers/dae_solve/#OrdinaryDiffEq.jl-(Mass-Matrix))
-which can  be handeled by ODE solvers from [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl).
+which can  be handled by ODE solvers from [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl).
 
 Parameters:
 - `system`: A [`VoronoiFVM.System`](https://WIAS-PDELib.github.io/VoronoiFVM.jl/stable/system/#VoronoiFVM.System-Tuple{ExtendableGrid})

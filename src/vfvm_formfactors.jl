@@ -298,7 +298,7 @@ function bfacefactors!(T::Type{Triangle2D}, ::Type{<:Cartesian3D}, coord, bfacen
 
     dd = (epar[1], epar[2], epar[3])
 
-    # Kanten-Flaechenanteile (ohne Abschneiden); epar als Hilfsfeld benutzt
+    # Kanten-Flaechenanteile (ohne Abschneiden); epar -> Hilfsfeld
     epar[1] = (dd[2] + dd[3] - dd[1]) * dd[1]
     epar[2] = (dd[3] + dd[1] - dd[2]) * dd[2]
     epar[3] = (dd[1] + dd[2] - dd[3]) * dd[3]

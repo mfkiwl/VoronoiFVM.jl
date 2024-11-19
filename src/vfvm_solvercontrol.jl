@@ -200,7 +200,7 @@ Base.@kwdef mutable struct SolverControl
     Δu_opt::Float64 = 0.1
 
     """
-    Control maximum  sice of update `Δu` for time stepping and embeding relative to
+    Control maximum  sice of update `Δu` for time stepping and embedding relative to
     `Δu_opt`. Time steps with `Δu > Δu_max_factor*Δu_opt` will be rejected.
     """
     Δu_max_factor::Float64 = 1.2

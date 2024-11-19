@@ -165,9 +165,9 @@ Keyword arguments:
 - `assembly`: either `:cellwise` (default) or `:edgewise`. Determine, how the assembly loop is organized.
    `:cellwise` means that the outer loop goes over grid cells (triangles, tetrahedra), and contributions to
    edge fluxes and node reactions are calculated for each cell. As a consequence, e.g. im 2D for all interior
-   edges, flux functions are callled twice, once for each adjacent cell. Especially in 3D, this becomes a significant
+   edges, flux functions are called twice, once for each adjacent cell. Especially in 3D, this becomes a significant
    overhead. With `:edgewise`, geometry factors of these edges are pre-assembled, and the outer assembly loops
-   go over all grid edges resp. nodes, still with separate calls if neigboring cells belong to different regions.
+   go over all grid edges resp. nodes, still with separate calls if neighboring cells belong to different regions.
 !!! note
     It is planned to make `:edgewise` the default in a later version.
 

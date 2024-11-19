@@ -31,7 +31,7 @@ makes it easy to use these Voronoi cells as REVs aka control volumes aka finite 
 
 ```@raw html
 <center>
-<img src="../vor.png" width="50%">
+<img src="../voro.png" width="50%">
 </center>
 ```
 

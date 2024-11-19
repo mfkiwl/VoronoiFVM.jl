@@ -29,7 +29,7 @@ md"""
 
 # ╔═╡ 0d1b7d24-4dc7-4f1d-944f-e279e18f151c
 md"""
-We show how to implment outflow boundary conditions when the velocities at the boundary are calculated by another equation in the system. A typical case is solute transport in porous media where fluid flow is calculated by Darcy's law which defines the convective velocity in the solute transport equation.
+We show how to implement outflow boundary conditions when the velocities at the boundary are calculated by another equation in the system. A typical case is solute transport in porous media where fluid flow is calculated by Darcy's law which defines the convective velocity in the solute transport equation.
 """
 
 # ╔═╡ f951520e-3edc-4353-910c-7f6ad5678e6b

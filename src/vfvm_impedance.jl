@@ -245,7 +245,7 @@ function measurement_derivative(system::AbstractSystem, measurement_functional, 
 
     # See https://github.com/JuliaDiff/SparseDiffTools.jl
 
-    # Color the matrix for automtic differentiation
+    # Color the matrix for automatic differentiation
     colors = matrix_colors(jac)
 
     # Use Julia automatic differentiation for the calculation of the Jacobian

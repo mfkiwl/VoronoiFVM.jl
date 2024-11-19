@@ -48,7 +48,7 @@ u_{tt}- c^2 \Delta u = 0
 ```
 
 
-We can create a system of first oder in time PDEs out of this:
+We can create a system of first order in time PDEs out of this:
 
 ```math 
     \begin{aligned}

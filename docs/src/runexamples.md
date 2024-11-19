@@ -28,7 +28,7 @@ If you want to modify the example, consider using `Revise.jl` and `includet`.
 
 ## Performance with closures
 
-VoronoiFVM provides two flavors of calbacks for constitutive
+VoronoiFVM provides two flavors of callbacks for constitutive
 functions: 
 
 - Callbacks with `data` parameoter. `data` is declared as part of `Physics` and

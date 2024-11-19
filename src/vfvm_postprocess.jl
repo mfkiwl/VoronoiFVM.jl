@@ -228,7 +228,7 @@ end
 """
     $(SIGNATURES)
 
-Calculate weigthed discrete ``L^2(\\Omega)`` norm of a solution vector.
+Calculate weighted discrete ``L^2(\\Omega)`` norm of a solution vector.
 """
 function l2norm(sys, u, species_weights = ones(num_species(sys)))
     _complete!(sys)
