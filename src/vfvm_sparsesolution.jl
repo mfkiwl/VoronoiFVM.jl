@@ -139,7 +139,7 @@ function Base.setindex!(a::SparseSolutionArray, v, ispec::Int, inode::Int)
         return a
     end
     # TODO: what is the right reacton here ?
-    # Ignoring seems to be better, so we can broacast etc.
+    # Ignoring seems to be better, so we can broadcast etc.
     # throw(DomainError("undefined degree of freedom"))
 end
 

@@ -83,7 +83,7 @@ or equivalently,
 ∑_{i=1}^n α_{i}^j S_i  \underset{k_j^+}{\stackrel{k_j^-}{\longrightleftharpoons}} ∑_{i=1}^n β_i^j S_i 
 ```
 The rate of these reactions depend on the concentrations
-``[S_i]`` of the species. Within ``Catalyst.jl``, due to consistency whith the derivation
+``[S_i]`` of the species. Within ``Catalyst.jl``, due to consistency with the derivation
 from stochastic approaches, the  default "combinatoric rate law" is
 ```math
     r_j=k_j^+ ∏_{i=1}^n \frac{[S_i]^{α_i^j}}{α_i^j!} - k_j^- ∏_{i=1}^n \frac{[S_i]^{β_i^j}}{β_i^j!}  
@@ -388,8 +388,8 @@ the surface reaction network.
 
 ### Problem specification
 Assume ``\Omega=(0,1)`` where a catalytic reaction takes place at ``x=0``. 
-We assume that the educts A, B, and the product AB2 are bulk species transported to te domain.
-At ``x=1`` we set Dirichlet boudary conditions providing A,B and removing AB2.
+We assume that the educts A, B, and the product AB2 are bulk species transported to the domain.
+At ``x=1`` we set Dirichlet boundary conditions providing A,B and removing AB2.
 
 A, B can adsorb  at the catalyst at ``x=0`` and  react to AB2 while adsorbed. 
 The product desorbs and is released to the bulk. So we have 

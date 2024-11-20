@@ -166,7 +166,7 @@ mutable struct Physics{Flux <: Function,
     boutflow::BOutflow
 
     """
-    List (Vector) of boundary regions which carry outflow bondary conditions.
+    List (Vector) of boundary regions which carry outflow boundary conditions.
     Influences when `boutflow` is called.
     """
     outflowboundaries::Vector{Int}

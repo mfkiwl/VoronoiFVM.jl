@@ -4,7 +4,7 @@
   - Remove VoronoiFVM solver strategies
   - Stop re-exporting ForwardDiff.value
   - Try to remove type piracies
-  - Remove `params` from edge, node structs (appearantly never used)
+  - Remove `params` from edge, node structs (apparently never used)
 
 ## v2.5.0 November 17, 2024
   - update show methods for physics, grid
@@ -24,11 +24,11 @@
 
 ## October 28, 2024
 
-Moved repositiory from https://github.com/j-fu/VoronoiFVM.jl to https://github.com/WIAS-PDELib/VoronoiFVM.jl. [WIAS-PDELib](https://github.com/WIAS-PDELib/) is a github organization created to collectively manage the Julia packages developed under the lead of the [WIAS Numerical Mathematics and Scientific Computing](https://wias-berlin.de/research/rgs/fg3)  research group. According to the [github docs on repository transfer](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository#whats-transferred-with-a-repository), all links to the previous repository location are automatically redirected to the new location, and all relationships with forks stay intact.
+Moved repository from https://github.com/j-fu/VoronoiFVM.jl to https://github.com/WIAS-PDELib/VoronoiFVM.jl. [WIAS-PDELib](https://github.com/WIAS-PDELib/) is a github organization created to collectively manage the Julia packages developed under the lead of the [WIAS Numerical Mathematics and Scientific Computing](https://wias-berlin.de/research/rgs/fg3)  research group. According to the [github docs on repository transfer](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository#whats-transferred-with-a-repository), all links to the previous repository location are automatically redirected to the new location, and all relationships with forks stay intact.
 
 ## v2.1.0 October 23, 2024
   - Features:
-    - Add VoronoiFVMExtendableFEMBaseExt  extension allowing to use velocity fields caculated  with [ExtendableFEM](https://github.com/chmerdon/ExtendableFEM.jl) in convection-diffusion problems
+    - Add VoronoiFVMExtendableFEMBaseExt  extension allowing to use velocity fields calculated  with [ExtendableFEM](https://github.com/chmerdon/ExtendableFEM.jl) in convection-diffusion problems
 
 ## v2.0.2 October 12, 2024
   - Bugfixes
@@ -100,7 +100,7 @@ Moved repositiory from https://github.com/j-fu/VoronoiFVM.jl to https://github.c
 
 ## v1.15.0 Dec 1, 2023
 - Adjusted time/embedding stepping scheme, added `num_final_steps` to  [`VoronoiFVM.SolverControl`](@ref). This may lead to
-  sligthly different results when solving time dependent problems. Some unit test values have been adapted. Before,
+  slightly different results when solving time dependent problems. Some unit test values have been adapted. Before,
   accidentally, very small time steps at the end of an evolution were possible.
 
 ## v1.14.0 Nov 27, 2023
@@ -124,7 +124,7 @@ Moved repositiory from https://github.com/j-fu/VoronoiFVM.jl to https://github.c
 
 ## v1.9.0 June 27, 2023
 - With `control.handle_exceptions=true`, in case of a failing step,
-  time stepping and embeding now returns the solution calculated so far instead of
+  time stepping and embedding now returns the solution calculated so far instead of
   throwing an error
 
 ## v1.8.0 June 20, 2023

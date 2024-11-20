@@ -8,7 +8,7 @@ function Random.rand(rng::AbstractRNG,
     ForwardDiff.Dual{T, V, N}(rand(rng, V))
 end
 
-# TODO: these may be not anymore neded
+# TODO: these may be not anymore needed
 canonical_matrix(A) = A
 canonical_matrix(A::AbstractExtendableSparseMatrixCSC) = SparseMatrixCSC(A)
 
