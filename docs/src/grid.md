@@ -48,6 +48,3 @@ Pages = [
 ]
 Order = [:function]
 ```
-
-
-
