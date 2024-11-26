@@ -63,4 +63,3 @@ after the solution of the unexcited stationary system.
 Modules = [VoronoiFVM]
 Pages = ["vfvm_impedance.jl"]
 ```
-

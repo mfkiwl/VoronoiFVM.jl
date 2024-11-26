@@ -13,5 +13,3 @@ Please consider a pull request updating `CITATION.bib` if you have published wor
 ```@bibliography
 *
 ```
-
-

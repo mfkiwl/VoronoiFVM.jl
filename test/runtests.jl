@@ -96,7 +96,3 @@ elseif haskey(ENV,"NOTEBOOKS_ONLY")
 else
     run_all_tests(; run_notebooks = VERSION < v"1.12.0-DEV.0" , notebooksonly = false)
 end
-
-
-
-

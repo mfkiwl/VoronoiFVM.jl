@@ -165,5 +165,3 @@ The entities describing the discrete system can be subdivided into two categorie
 
 The solution of the nonlinear systems of equations is performed by Newton's method combined with various direct and iterative linear solvers. The Jacobi matrices used in Newton's method are assembled from the constitutive functions
 with the help of forward mode automatic differentiation implemented in  [ForwardDiff.jl](https://github.com/JuliaDiff/ForwardDiff.jl).
-
-

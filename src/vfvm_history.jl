@@ -169,4 +169,3 @@ history_details(sol) = details(sol.history)
 Return summary of solver history from last `solve` call, if `log` was set to true.
 """
 history_summary(sol) = summary(sol.history)
-
