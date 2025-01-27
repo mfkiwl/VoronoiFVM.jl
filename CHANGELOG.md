@@ -6,6 +6,9 @@
   - Try to remove type piracies
   - Remove `params` from edge, node structs (apparently never used)
 
+## v2.7 February 6, 2025
+  - Allow for LinearSolve v3
+  
 ## v2.6.1 November 27, 2024
   - Allow to calculate node flux reconstruction from general function
   - Runic formatting 
