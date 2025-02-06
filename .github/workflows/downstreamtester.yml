@@ -1,0 +1,56 @@
+# Set up DownstreamTester.jl to run nightly jobs
+
+name: DownstreamTester
+
+
+on: 
+  schedule:
+    - cron: 0 6 * * * # Every day at 6:00
+
+  #Allow manual triggering of workflow
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+
+    env:
+      ISSUETOKEN: ${{secrets.ISSUE_TOKEN}}
+
+    steps:
+      # Check out master branch (to get the config file)
+      - uses: actions/checkout@v4
+        with:
+          path: "master"
+
+      # Check out logs branch into testdeps/logs
+      - uses: actions/checkout@v4
+        with:
+          ref: DownstreamTester/nightlylogs
+          path: "testdeps/logs"
+
+      # Download  nightly version of Julia
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: 'nightly'
+
+      - name: setup git
+        run: |
+          git config --global user.email "198082523+pdelib-downstreamtester@users.noreply.github.com"
+          git config --global user.name "PDELib Downstreamtester"
+
+
+      # Add DownstreamTester to local Julia environment and run nightly()
+      - name: run nightly()
+        working-directory: ./master
+        run: |
+          julia -e '
+            using Pkg
+            Pkg.add(url="https://github.com/jpthiele/DownstreamTester.jl")
+            using DownstreamTester
+            DownstreamTester.nightly()'
+
+      # Save the daily logs to the logs branch
+      - name: commit logs
+        working-directory: ./testdeps/logs
+        run: git push
