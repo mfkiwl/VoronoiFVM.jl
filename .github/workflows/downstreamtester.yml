@@ -48,7 +48,7 @@ jobs:
             using Pkg
             Pkg.add(url="https://github.com/jpthiele/DownstreamTester.jl")
             using DownstreamTester
-            DownstreamTester.nightly()'
+            DownstreamTester.nightly(;nightlylabels=["julia nightly"])'
 
       # Save the daily logs to the logs branch
       - name: commit logs
