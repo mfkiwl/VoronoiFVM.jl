@@ -78,7 +78,7 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
         Aqua.test_project_extras(VoronoiFVM)
         Aqua.test_stale_deps(VoronoiFVM)
         Aqua.test_deps_compat(VoronoiFVM)
-        Aqua.test_piracies(VoronoiFVM, broken = true)
+        Aqua.test_piracies(VoronoiFVM)
         Aqua.test_persistent_tasks(VoronoiFVM)
     end
 
@@ -96,5 +96,5 @@ if haskey(ENV, "EXAMPLES_ONLY")
 elseif haskey(ENV, "NOTEBOOKS_ONLY")
     run_all_tests(; run_notebooks = true, notebooksonly = true)
 else
-    run_all_tests(; run_notebooks = VERSION < v"1.12.0-DEV.0", notebooksonly = false)
+    run_all_tests(; run_notebooks = true, notebooksonly = false)
 end
