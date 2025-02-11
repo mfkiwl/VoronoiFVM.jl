@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ISSUETOKEN: ${{secrets.ISSUE_TOKEN}}
+      ISSUETOKEN: ${{secrets.ISSUETOKEN}}
 
     steps:
       # Check out master branch (to get the config file)
