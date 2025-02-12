@@ -76,7 +76,7 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
         Aqua.test_unbound_args(VoronoiFVM)
         Aqua.test_undefined_exports(VoronoiFVM)
         Aqua.test_project_extras(VoronoiFVM)
-        Aqua.test_stale_deps(VoronoiFVM) 
+        Aqua.test_stale_deps(VoronoiFVM)
         Aqua.test_deps_compat(VoronoiFVM)
         Aqua.test_piracies(VoronoiFVM, broken = true)
         if VERSION >= v"1.11.0"
