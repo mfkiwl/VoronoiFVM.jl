@@ -96,5 +96,5 @@ if haskey(ENV, "EXAMPLES_ONLY")
 elseif haskey(ENV, "NOTEBOOKS_ONLY")
     run_all_tests(; run_notebooks = true, notebooksonly = true)
 else
-    run_all_tests(; run_notebooks = VERSION < v"1.12.0-DEV.0", notebooksonly = false)
+    run_all_tests(; run_notebooks = true, notebooksonly = false)
 end
