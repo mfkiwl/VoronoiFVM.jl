@@ -24,5 +24,8 @@ function ttri(; ntest = 100)
     return nothing
 end
 
+function runtests()
+    ttri()
+end
 
 end
