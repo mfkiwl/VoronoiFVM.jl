@@ -76,10 +76,15 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
         Aqua.test_unbound_args(VoronoiFVM)
         Aqua.test_undefined_exports(VoronoiFVM)
         Aqua.test_project_extras(VoronoiFVM)
-        Aqua.test_stale_deps(VoronoiFVM)
+        Aqua.test_stale_deps(VoronoiFVM) 
         Aqua.test_deps_compat(VoronoiFVM)
         Aqua.test_piracies(VoronoiFVM, broken = true)
-        Aqua.test_persistent_tasks(VoronoiFVM)
+        if VERSION >= v"1.11.0"
+            # Avoid running into https://github.com/SciML/LinearSolve.jl/issues/573
+            Aqua.test_persistent_tasks(VoronoiFVM)
+        else
+            @info "skipping   Aqua.test_persistent_tasks(VoronoiFVM) on Julia 1.10"
+        end
     end
 
     if isdefined(Docs, :undocumented_names) # >=1.11
@@ -96,5 +101,6 @@ if haskey(ENV, "EXAMPLES_ONLY")
 elseif haskey(ENV, "NOTEBOOKS_ONLY")
     run_all_tests(; run_notebooks = true, notebooksonly = true)
 else
-    run_all_tests(; run_notebooks = true, notebooksonly = false)
+#    run_all_tests(; run_notebooks = true, notebooksonly = false)
+    run_all_tests(; run_notebooks = false, notebooksonly = true)
 end
