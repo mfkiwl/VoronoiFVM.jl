@@ -25,7 +25,7 @@ function ttri(; ntest = 100)
 end
 
 function runtests()
-    ttri()
+    return ttri()
 end
 
 end
