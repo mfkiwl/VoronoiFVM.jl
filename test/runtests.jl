@@ -101,6 +101,5 @@ if haskey(ENV, "EXAMPLES_ONLY")
 elseif haskey(ENV, "NOTEBOOKS_ONLY")
     run_all_tests(; run_notebooks = true, notebooksonly = true)
 else
-#    run_all_tests(; run_notebooks = true, notebooksonly = false)
-    run_all_tests(; run_notebooks = false, notebooksonly = true)
+    run_all_tests(; run_notebooks = true, notebooksonly = false)
 end
