@@ -28,13 +28,12 @@ struct EmbeddingError <: Exception
     msg::String
 end
 
-log_output::Bool=isdefined(Main,:PlutoRunner)
+log_output::Bool = true
 
 """
     print_output!()
 
 Write all subsequent output of the VoronoiFVM package to screen via println().
-This is the default if the code is run outside of Pluto notebooks.
 
 If enabled in Pluto notebooks, the output is directed to the terminal  widget
 below a pluto cell. Warnings in addition are sent via logging in order to not
@@ -51,23 +50,29 @@ print_output!() = global log_output = false
     log_output!()
 
 Write all subsequent output of the VoronoiFVM package to screen via Julia's 
-logging methods (using @info or @warn)
+logging methods (using @info or @warn).
 
-This is the default if the code is run in Pluto notebooks.
+This is the default.
 
 This behavior can be changed via [`print_output!`](@ref).
 
 For fine-tuning  solver output, see the `verbose` flag in [`SolverControl`](@ref).
 """
-log_output!()  = global log_output = true
+log_output!() = global log_output = true
 
 
+"""
+    _warn(str)
+
+Warning output, either via @warn or via println.
+In Pluto notebooks, @warn is alway used.
+"""
 function _warn(str)
     global log_output
     if log_output
         @warn str
     else
-        if isdefined(Main,:PlutoRunner)
+        if isdefined(Main, :PlutoRunner)
             @warn str
         end
         println("WARNING: $(str)")
@@ -75,6 +80,11 @@ function _warn(str)
     return
 end
 
+"""
+    _info(str)
+
+Info output, either via @info or via println.
+"""
 function _info(str)
     global log_output
     if log_output
@@ -86,17 +96,16 @@ function _info(str)
 end
 
 
-
-
 """
+      _warn(error, backtrace)
 Print error when catching exceptions
 """
-function _print_error(err, st)
+function _warn(err, backtrace)
     io = IOBuffer()
     println(io, err)
     nlines = 0
-    for i in 1:min(nlines, length(st))
-        line = @sprintf("%s", st[i])
+    for i in 1:min(nlines, length(backtrace))
+        line = @sprintf("%s", backtrace[i])
         L = length(line)
         if L < 80
             println(io, line)
@@ -106,8 +115,8 @@ function _print_error(err, st)
             println(io, line[(L - 35):L])
         end
     end
-    # if length(st) > nlines
+    # if length(backtrace) > nlines
     #     println(io, "...")
     # end
-    return _warn(String(take!(io)))
+    return warn(String(take!(io)))
 end
