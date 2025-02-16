@@ -28,12 +28,14 @@ struct EmbeddingError <: Exception
     msg::String
 end
 
-log_output::Bool = true
+log_output::Bool = false
 
 """
     print_output!()
 
 Write all subsequent output of the VoronoiFVM package to screen via println().
+
+This is the default.
 
 If enabled in Pluto notebooks, the output is directed to the terminal  widget
 below a pluto cell. Warnings in addition are sent via logging in order to not
@@ -52,7 +54,6 @@ print_output!() = global log_output = false
 Write all subsequent output of the VoronoiFVM package to screen via Julia's 
 logging methods (using @info or @warn).
 
-This is the default.
 
 This behavior can be changed via [`print_output!`](@ref).
 
@@ -118,5 +119,5 @@ function _warn(err, backtrace)
     # if length(backtrace) > nlines
     #     println(io, "...")
     # end
-    return warn(String(take!(io)))
+    return _warn(String(take!(io)))
 end
