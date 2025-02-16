@@ -60,7 +60,7 @@ function _solve_linear!(u, state, nlhistory, control, method_linear, A, b)
         nlhistory.nlin = sol.iters
     catch err
         if (control.handle_exceptions)
-            _print_error(err, stacktrace(catch_backtrace()))
+            _warn(err, stacktrace(catch_backtrace()))
             throw(LinearSolverError())
         else
             rethrow(err)

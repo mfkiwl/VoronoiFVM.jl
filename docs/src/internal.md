@@ -127,5 +127,6 @@ VoronoiFVM.integrate(::Type{<:Cylindrical2D}, coordl, coordr, hnormal, velofunc;
 VoronoiFVM.doolittle_ludecomp!
 VoronoiFVM.doolittle_lusolve!
 VoronoiFVM.bernoulli_horner
-VoronoiFVM._print_error
+VoronoiFVM._warn
+VoronoiFVM._info
 ```
