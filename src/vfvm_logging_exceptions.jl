@@ -66,7 +66,7 @@ log_output!() = global log_output = true
     _warn(str)
 
 Warning output, either via @warn or via println.
-In Pluto notebooks, @warn is alway used.
+In Pluto notebooks, @warn is always used.
 """
 function _warn(str)
     global log_output
