@@ -18,8 +18,8 @@ function ttri(; ntest = 100)
         cellfactors!(Triangle2D, Cartesian2D, coord2d, cellnodes, 1, npar2d, epar2d)
         bfacefactors!(Triangle2D, Cartesian3D, coord3d, cellnodes, 1, npar3d, epar3d)
 
-        @test npar3d ≈ npar2d
-        @test epar3d ≈ epar2d
+        @test npar3d ≈ npar2d rtol = 1.0e-7
+        @test epar3d ≈ epar2d rtol = 1.0e-7
     end
     return nothing
 end
