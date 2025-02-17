@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.20.3
 
 using Markdown
 using InteractiveUtils
@@ -15,6 +15,20 @@ macro bind(def, element)
     end
     #! format: on
 end
+
+# ╔═╡ 5e13b3db-570c-4159-939a-7e2268f0a102
+md"""
+# Some problems with Voronoi FVM
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/problemcase.jl)
+
+Draft. J. Fuhrmann, Oct. 29. 2021. Updated Dec 19, 2021.
+
+We discuss one of the critical cases for application the Voronoi finite volume method.
+We provide some practical fix and opine that the finite element method probably has the same problems.
+"""
+
+# ╔═╡ 556480e0-94f1-4e47-be9a-3e1e0e99555c
+TableOfContents(; aside = false)
 
 # ╔═╡ 60941eaa-1aea-11eb-1277-97b991548781
 begin
@@ -32,20 +46,6 @@ begin
         GridVisualize.default_plotter!(CairoMakie)
     end
 end;
-
-# ╔═╡ 5e13b3db-570c-4159-939a-7e2268f0a102
-md"""
-# Some problems with Voronoi FVM
-[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/problemcase.jl)
-
-Draft. J. Fuhrmann, Oct. 29. 2021. Updated Dec 19, 2021.
-
-We discuss one of the critical cases for application the Voronoi finite volume method.
-We provide some practical fix and opine that the finite element method probably has the same problems.
-"""
-
-# ╔═╡ 556480e0-94f1-4e47-be9a-3e1e0e99555c
-TableOfContents(; aside = false)
 
 # ╔═╡ fae47c55-eef8-4428-bb5f-45824978753d
 md"""
@@ -75,6 +75,36 @@ md"""
 The domain is described by the following discretization grid:
 """
 
+# ╔═╡ 46a0f078-4165-4e37-9e69-e69af8584f6e
+gridplot(grid_2d(); resolution = (400, 300))
+
+# ╔═╡ cc325b2c-6174-4b8d-8e39-202ac68b5705
+md"""
+In the center of the domain, we assume a layer with high permeability.
+
+As  boundary  conditions for the pressure ``p`` we choose  fixed pressure values at  the left
+and right boundaries of the  domain, triggering a constant pressure gradient throughout the domain.
+
+At the inlet of the high  permeability layer, we set ``c=1``, and at the
+outlet, we set ``c=0``.
+
+The high permeability layer has length `L`=$( L) and width `W`= $(W).
+
+We solve the time dependent problem on three types of  rectangular grids with the same
+resolution in   $x$ direction and different variants to to handle the  high permeability
+layer.
+
+
+- `grid_n` - a "naive" grid which just resolves the permeability layer and the surrounding material with equally spaced (in y direction) grids
+- `grid_1` - a 1D grid  of the high permeability layer. With high permeability contrast, the solution of the 2D case at y=0 should coincide with the 1D solution
+- `grid_f` - a "fixed" 2D grid which resolves the permeability layer and the surrounding material with equally spaced (in y direction) grids and "protection layers" of width `ε_fix`=$(ε_fix)  correcting the size of high permeability control volumes
+
+
+"""
+
+# ╔═╡ 3f693666-4026-4c01-a7aa-8c7dcbc32372
+gridplot(grid_2d(; ε_fix = 1.0e-1); resolution = (400, 300))
+
 # ╔═╡ cd013964-f329-4d2c-ae4b-305093f0ac56
 md"""
 ### Results
@@ -91,15 +121,100 @@ tend = 100
 # ╔═╡ 5f6ac608-b1a0-450e-910e-d7d8ea2ffae0
 ε_fix = 1.0e-4
 
+# ╔═╡ cd88123a-b042-43e2-99b9-ec925a8794ed
+grid_n, sol_n, bt_n = trsolve(grid_2d(; nref = nref); tend = tend);
+
+# ╔═╡ 1cf0db37-42cc-4dd9-9da3-ebb94ff63b1b
+sum(bt_n)
+
+# ╔═╡ c52ed973-2250-423a-b427-e91972f7ce74
+@test sum(bt_n) ≈ 18.143158169851787
+
+# ╔═╡ b0ad0adf-6f6c-4fb3-b58e-e05cc8c0c796
+grid_1, sol_1, bt_1 = trsolve(grid_1d(; nref = nref); tend = tend);
+
+# ╔═╡ 02330841-fdf9-4ebe-9da6-cf96529b223c
+@test sum(bt_1) ≈ 20.66209910195916
+
+# ╔═╡ 76b77ec0-27b0-4a02-9ae4-43d756eb09dd
+grid_f, sol_f, bt_f = trsolve(grid_2d(; nref = nref, ε_fix = ε_fix); tend = tend);
+
+# ╔═╡ d23d6634-266c-43e3-9493-b61fb390bbe7
+@test sum(bt_f) ≈ 20.661131375044135
+
+# ╔═╡ 904b36f0-10b4-4db6-9252-21668305de9c
+grid_ϕ, sol_ϕ, bt_ϕ = trsolve(grid_2d(; nref = nref); ϕ = [1.0e-3, 1], tend = tend);
+
+# ╔═╡ b260df8a-3721-4203-bc0c-a23bcab9a311
+@test sum(bt_ϕ) ≈ 20.412256299447236
+
+# ╔═╡ ce49bb25-b2d0-4d17-a8fe-d7b62e9b20be
+begin
+    p1 = GridVisualizer(;
+        resolution = (500, 200),
+        xlabel = "t",
+        ylabel = "outflow",
+        legend = :rb,
+        title = "Breakthrough Curves"
+    )
+    scalarplot!(p1, sol_n.t, bt_n; label = "naive grid", color = :red)
+    scalarplot!(
+        p1,
+        sol_1.t,
+        bt_1;
+        label = "1D grid",
+        markershape = :x,
+        markersize = 10,
+        clear = false,
+        color = :green
+    )
+    scalarplot!(
+        p1,
+        sol_f.t,
+        bt_f;
+        label = "grid with fix",
+        markershape = :circle,
+        color = :green,
+        clear = false
+    )
+    scalarplot!(
+        p1,
+        sol_ϕ.t,
+        bt_ϕ;
+        label = "modified ϕ",
+        markershape = :cross,
+        color = :blue,
+        clear = false
+    )
+    reveal(p1)
+end
+
 # ╔═╡ 5b60c7d4-7bdb-4989-b055-6695b9fdeedc
 md"""
 Here, we plot the solutions for the `grid_n` case and the `grid_f` case.
 """
 
+# ╔═╡ e36d2aef-1b5a-45a7-9289-8d1e544bcedd
+scalarplot(
+    grid_1,
+    sol_1(t)[ic, :];
+    levels = 0:0.2:1,
+    resolution = (500, 150),
+    xlabel = "x",
+    ylabel = "c",
+    title = "1D calculation, t=$t"
+)
+
 # ╔═╡ 98ae56dd-d42d-4a93-bb0b-5956b6e981a3
 md"""
 Time: $(@bind t PlutoUI.Slider(1:tend/100:tend,show_value=true,default=tend*0.1))
 """
+
+# ╔═╡ 732e79fa-5b81-4401-974f-37ea3427e770
+scalarplot(grid_n, sol_n(t)[ic, :]; resolution = (500, 200), show = true)
+
+# ╔═╡ f42d4eb6-3e07-40c9-a8b3-dc772e674222
+scalarplot(grid_f, sol_f(t)[ic, :]; resolution = (500, 200), show = true)
 
 # ╔═╡ 99c3b54b-d458-482e-8aa0-d2c2b51fdf25
 md"""
@@ -118,6 +233,48 @@ where D is large in the high permeability region and small otherwise. R is a con
 md"""
 ### Results
 """
+
+# ╔═╡ 2f560406-d169-4027-9cfe-7689494edf45
+rdgrid_1, rdsol_1, of_1 = rdsolve(grid_1d(; nref = nref));
+
+# ╔═╡ 40850999-12da-46cd-b86c-45808592fb9e
+@test of_1 ≈ -0.013495959676585267
+
+# ╔═╡ a6714eac-9e7e-4bdb-beb7-aca354664ad6
+rdgrid_n, rdsol_n, of_n = rdsolve(grid_2d(; nref = nref));
+
+# ╔═╡ d1bfac0f-1f20-4c0e-9a9f-c7d36bc338ef
+@test of_n ≈ -0.00023622450350365264
+
+# ╔═╡ 20d7624b-f43c-4ac2-bad3-383a9e4e1b42
+rdgrid_f, rdsol_f, of_f = rdsolve(grid_2d(; nref = nref, ε_fix = ε_fix));
+
+# ╔═╡ 5d407d63-8a46-4480-94b4-80510eac5166
+@test of_f ≈ -0.013466874615165499
+
+# ╔═╡ c0fc1f71-52ba-41a9-92d1-74e82ac7826c
+rdgrid_r, rdsol_r, of_r = rdsolve(grid_2d(; nref = nref); R = [0, 0.1]);
+
+# ╔═╡ 43622531-b7d0-44d6-b840-782021eb2ef0
+@test of_r ≈ -0.013495959676764535
+
+# ╔═╡ c08e86f6-b5c2-4762-af23-382b1b153f45
+md"""
+We measure the outflow at the outlet. As a result, we obtain:
+   - 1D case: $(of_1)
+   - 2D case, naive grid: $(of_n)
+   - 2D case, grid with "protective layer": $(of_f)
+   - 2D case, naive grid, "modified" R: $(of_r)
+"""
+
+# ╔═╡ 34228382-4b1f-4897-afdd-19db7d5a7c59
+scalarplot(rdgrid_1, rdsol_1; resolution = (300, 200))
+
+# ╔═╡ 5899df30-5198-4946-a148-108746cdde79
+scalarplot(rdgrid_n, rdsol_n; resolution = (500, 200))
+
+# ╔═╡ 6a6d0e94-8f0d-4119-945c-dd48ec0798fd
+scalarplot(rdgrid_f, rdsol_f; resolution = (500, 200))
 
 # ╔═╡ fcd066f1-bcd8-4479-a4e4-7b8c235336c4
 md"""
@@ -207,30 +364,6 @@ begin
     Wlow = 2 # width of adjacent low perm layers
 end;
 
-# ╔═╡ cc325b2c-6174-4b8d-8e39-202ac68b5705
-md"""
-In the center of the domain, we assume a layer with high permeability.
-
-As  boundary  conditions for the pressure ``p`` we choose  fixed pressure values at  the left
-and right boundaries of the  domain, triggering a constant pressure gradient throughout the domain.
-
-At the inlet of the high  permeability layer, we set ``c=1``, and at the
-outlet, we set ``c=0``.
-
-The high permeability layer has length `L`=$( L) and width `W`= $(W).
-
-We solve the time dependent problem on three types of  rectangular grids with the same
-resolution in   $x$ direction and different variants to to handle the  high permeability
-layer.
-
-
-- `grid_n` - a "naive" grid which just resolves the permeability layer and the surrounding material with equally spaced (in y direction) grids
-- `grid_1` - a 1D grid  of the high permeability layer. With high permeability contrast, the solution of the 2D case at y=0 should coincide with the 1D solution
-- `grid_f` - a "fixed" 2D grid which resolves the permeability layer and the surrounding material with equally spaced (in y direction) grids and "protection layers" of width `ε_fix`=$(ε_fix)  correcting the size of high permeability control volumes
-
-
-"""
-
 # ╔═╡ 47bc8e6a-e296-42c9-bfc5-967edfb0feb7
 md"""
 Boundary conditions:
@@ -271,12 +404,6 @@ function grid_2d(; nref = 0, ε_fix = 0.0)
     bfacemask!(grid, [0, -W / 2], [0, W / 2], Γ_in)
     return bfacemask!(grid, [L, -W / 2], [L, W / 2], Γ_out)
 end
-
-# ╔═╡ 46a0f078-4165-4e37-9e69-e69af8584f6e
-gridplot(grid_2d(); resolution = (400, 300))
-
-# ╔═╡ 3f693666-4026-4c01-a7aa-8c7dcbc32372
-gridplot(grid_2d(; ε_fix = 1.0e-1); resolution = (400, 300))
 
 # ╔═╡ c402f03c-746a-45b8-aaac-902a2f196094
 function grid_1d(; nref = 0)
@@ -397,91 +524,6 @@ function trsolve(
     return grid, sol, bt
 end
 
-# ╔═╡ cd88123a-b042-43e2-99b9-ec925a8794ed
-grid_n, sol_n, bt_n = trsolve(grid_2d(; nref = nref); tend = tend);
-
-# ╔═╡ 1cf0db37-42cc-4dd9-9da3-ebb94ff63b1b
-sum(bt_n)
-
-# ╔═╡ c52ed973-2250-423a-b427-e91972f7ce74
-@test sum(bt_n) ≈ 18.143158169851787
-
-# ╔═╡ 732e79fa-5b81-4401-974f-37ea3427e770
-scalarplot(grid_n, sol_n(t)[ic, :]; resolution = (500, 200), show = true)
-
-# ╔═╡ b0ad0adf-6f6c-4fb3-b58e-e05cc8c0c796
-grid_1, sol_1, bt_1 = trsolve(grid_1d(; nref = nref); tend = tend);
-
-# ╔═╡ 02330841-fdf9-4ebe-9da6-cf96529b223c
-@test sum(bt_1) ≈ 20.66209910195916
-
-# ╔═╡ e36d2aef-1b5a-45a7-9289-8d1e544bcedd
-scalarplot(
-    grid_1,
-    sol_1(t)[ic, :];
-    levels = 0:0.2:1,
-    resolution = (500, 150),
-    xlabel = "x",
-    ylabel = "c",
-    title = "1D calculation, t=$t"
-)
-
-# ╔═╡ 76b77ec0-27b0-4a02-9ae4-43d756eb09dd
-grid_f, sol_f, bt_f = trsolve(grid_2d(; nref = nref, ε_fix = ε_fix); tend = tend);
-
-# ╔═╡ d23d6634-266c-43e3-9493-b61fb390bbe7
-@test sum(bt_f) ≈ 20.661131375044135
-
-# ╔═╡ f42d4eb6-3e07-40c9-a8b3-dc772e674222
-scalarplot(grid_f, sol_f(t)[ic, :]; resolution = (500, 200), show = true)
-
-# ╔═╡ 904b36f0-10b4-4db6-9252-21668305de9c
-grid_ϕ, sol_ϕ, bt_ϕ = trsolve(grid_2d(; nref = nref); ϕ = [1.0e-3, 1], tend = tend);
-
-# ╔═╡ b260df8a-3721-4203-bc0c-a23bcab9a311
-@test sum(bt_ϕ) ≈ 20.412256299447236
-
-# ╔═╡ ce49bb25-b2d0-4d17-a8fe-d7b62e9b20be
-begin
-    p1 = GridVisualizer(;
-        resolution = (500, 200),
-        xlabel = "t",
-        ylabel = "outflow",
-        legend = :rb,
-        title = "Breakthrough Curves"
-    )
-    scalarplot!(p1, sol_n.t, bt_n; label = "naive grid", color = :red)
-    scalarplot!(
-        p1,
-        sol_1.t,
-        bt_1;
-        label = "1D grid",
-        markershape = :x,
-        markersize = 10,
-        clear = false,
-        color = :green
-    )
-    scalarplot!(
-        p1,
-        sol_f.t,
-        bt_f;
-        label = "grid with fix",
-        markershape = :circle,
-        color = :green,
-        clear = false
-    )
-    scalarplot!(
-        p1,
-        sol_ϕ.t,
-        bt_ϕ;
-        label = "modified ϕ",
-        markershape = :cross,
-        color = :blue,
-        clear = false
-    )
-    reveal(p1)
-end
-
 # ╔═╡ 78d92b4a-bdb1-4117-ab9c-b422eac403b1
 md"""
 ### Reaction-Diffusion solver
@@ -524,48 +566,6 @@ function rdsolve(grid; D = [1.0e-12, 1.0], R = [1, 0.1])
     return grid, sol[1, :], of[1] * fac
 end
 
-# ╔═╡ 2f560406-d169-4027-9cfe-7689494edf45
-rdgrid_1, rdsol_1, of_1 = rdsolve(grid_1d(; nref = nref));
-
-# ╔═╡ 40850999-12da-46cd-b86c-45808592fb9e
-@test of_1 ≈ -0.013495959676585267
-
-# ╔═╡ 34228382-4b1f-4897-afdd-19db7d5a7c59
-scalarplot(rdgrid_1, rdsol_1; resolution = (300, 200))
-
-# ╔═╡ a6714eac-9e7e-4bdb-beb7-aca354664ad6
-rdgrid_n, rdsol_n, of_n = rdsolve(grid_2d(; nref = nref));
-
-# ╔═╡ d1bfac0f-1f20-4c0e-9a9f-c7d36bc338ef
-@test of_n ≈ -0.00023622450350365264
-
-# ╔═╡ 5899df30-5198-4946-a148-108746cdde79
-scalarplot(rdgrid_n, rdsol_n; resolution = (500, 200))
-
-# ╔═╡ 20d7624b-f43c-4ac2-bad3-383a9e4e1b42
-rdgrid_f, rdsol_f, of_f = rdsolve(grid_2d(; nref = nref, ε_fix = ε_fix));
-
-# ╔═╡ 5d407d63-8a46-4480-94b4-80510eac5166
-@test of_f ≈ -0.013466874615165499
-
-# ╔═╡ 6a6d0e94-8f0d-4119-945c-dd48ec0798fd
-scalarplot(rdgrid_f, rdsol_f; resolution = (500, 200))
-
-# ╔═╡ c0fc1f71-52ba-41a9-92d1-74e82ac7826c
-rdgrid_r, rdsol_r, of_r = rdsolve(grid_2d(; nref = nref); R = [0, 0.1]);
-
-# ╔═╡ 43622531-b7d0-44d6-b840-782021eb2ef0
-@test of_r ≈ -0.013495959676764535
-
-# ╔═╡ c08e86f6-b5c2-4762-af23-382b1b153f45
-md"""
-We measure the outflow at the outlet. As a result, we obtain:
-   - 1D case: $(of_1)
-   - 2D case, naive grid: $(of_n)
-   - 2D case, grid with "protective layer": $(of_f)
-   - 2D case, naive grid, "modified" R: $(of_r)
-"""
-
 # ╔═╡ 0cc1c511-f351-421f-991a-a27f26a8db4f
 html"<hr>"
 
@@ -597,9 +597,9 @@ VoronoiFVM = "~2.6.3"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.8"
+julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "b1232a95cd5a7ace06eaa855b5c0e4e4ba349b37"
+project_hash = "7a739cd881e054df0979ebda68080b9cfa32248f"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "fb97701c117c8162e84dfcf80215caa904aef44f"
@@ -692,7 +692,7 @@ version = "0.4.2"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
-version = "1.1.1"
+version = "1.1.2"
 
 [[deps.ArnoldiMethod]]
 deps = ["LinearAlgebra", "Random", "StaticArrays"]
@@ -744,6 +744,7 @@ weakdeps = ["SparseArrays"]
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+version = "1.11.0"
 
 [[deps.Automa]]
 deps = ["PrecompileTools", "SIMD", "TranscodingStreams"]
@@ -775,6 +776,7 @@ weakdeps = ["SparseArrays"]
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+version = "1.11.0"
 
 [[deps.Bijections]]
 git-tree-sha1 = "d8b0439d2be438a5f2cd68ec158fe08a7b2595b7"
@@ -806,6 +808,7 @@ version = "0.2.6"
 
 [[deps.CRC32c]]
 uuid = "8bf52ea8-c179-5cab-976a-9e18b702a9bc"
+version = "1.11.0"
 
 [[deps.CRlibm_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -989,6 +992,7 @@ version = "1.0.0"
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+version = "1.11.0"
 
 [[deps.DelaunayTriangulation]]
 deps = ["AdaptivePredicates", "EnumX", "ExactPredicates", "Random"]
@@ -1011,6 +1015,7 @@ version = "1.15.1"
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+version = "1.11.0"
 
 [[deps.Distributions]]
 deps = ["AliasTables", "FillArrays", "LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SpecialFunctions", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
@@ -1193,6 +1198,7 @@ weakdeps = ["Mmap", "Test"]
 
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+version = "1.11.0"
 
 [[deps.FillArrays]]
 deps = ["LinearAlgebra"]
@@ -1289,6 +1295,7 @@ version = "0.1.3"
 [[deps.Future]]
 deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
+version = "1.11.0"
 
 [[deps.GPUArraysCore]]
 deps = ["Adapt"]
@@ -1487,6 +1494,7 @@ version = "2025.0.4+0"
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+version = "1.11.0"
 
 [[deps.Interpolations]]
 deps = ["Adapt", "AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
@@ -1679,6 +1687,7 @@ version = "2.6.0"
 [[deps.LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
 uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
+version = "1.11.0"
 
 [[deps.LazyModules]]
 git-tree-sha1 = "a560dd966b386ac9ae60bdd3a3d3a326062d3c3e"
@@ -1693,16 +1702,17 @@ version = "0.6.4"
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.4.0+0"
+version = "8.6.0+0"
 
 [[deps.LibGit2]]
 deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
+version = "1.11.0"
 
 [[deps.LibGit2_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.6.4+0"
+version = "1.7.2+0"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
@@ -1711,6 +1721,7 @@ version = "1.11.0+1"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+version = "1.11.0"
 
 [[deps.Libffi_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1769,6 +1780,7 @@ version = "0.9.1"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+version = "1.11.0"
 
 [[deps.LinearSolve]]
 deps = ["ArrayInterface", "ChainRulesCore", "ConcreteStructs", "DocStringExtensions", "EnumX", "FastLapackInterface", "GPUArraysCore", "InteractiveUtils", "KLU", "Krylov", "LazyArrays", "Libdl", "LinearAlgebra", "MKL_jll", "Markdown", "PrecompileTools", "Preferences", "RecursiveFactorization", "Reexport", "SciMLBase", "SciMLOperators", "Setfield", "SparseArrays", "Sparspak", "StaticArraysCore", "UnPack"]
@@ -1824,6 +1836,7 @@ version = "0.3.29"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+version = "1.11.0"
 
 [[deps.LoopVectorization]]
 deps = ["ArrayInterface", "CPUSummary", "CloseOpenIntervals", "DocStringExtensions", "HostCPUFeatures", "IfElse", "LayoutPointers", "LinearAlgebra", "OffsetArrays", "PolyesterWeave", "PrecompileTools", "SIMDTypes", "SLEEFPirates", "Static", "StaticArrayInterface", "ThreadingUtilities", "UnPack", "VectorizationBase"]
@@ -1888,6 +1901,7 @@ version = "0.4.2"
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+version = "1.11.0"
 
 [[deps.MathTeXEngine]]
 deps = ["AbstractTrees", "Automa", "DataStructures", "FreeTypeAbstraction", "GeometryBasics", "LaTeXStrings", "REPL", "RelocatableFolders", "UnicodeFun"]
@@ -1898,7 +1912,7 @@ version = "0.6.2"
 [[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.28.2+1"
+version = "2.28.6+0"
 
 [[deps.Missings]]
 deps = ["DataAPI"]
@@ -1908,6 +1922,7 @@ version = "1.2.0"
 
 [[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+version = "1.11.0"
 
 [[deps.MosaicViews]]
 deps = ["MappedArrays", "OffsetArrays", "PaddedViews", "StackViews"]
@@ -1917,7 +1932,7 @@ version = "0.3.4"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2023.1.10"
+version = "2023.12.12"
 
 [[deps.MultivariatePolynomials]]
 deps = ["ChainRulesCore", "DataStructures", "LinearAlgebra", "MutableArithmetics"]
@@ -1970,7 +1985,7 @@ version = "1.3.5+1"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
-version = "0.3.23+4"
+version = "0.3.27+1"
 
 [[deps.OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
@@ -2066,9 +2081,13 @@ uuid = "30392449-352a-5448-841d-b1acce4e97dc"
 version = "0.43.4+0"
 
 [[deps.Pkg]]
-deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
+deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.10.0"
+version = "1.11.0"
+weakdeps = ["REPL"]
+
+    [deps.Pkg.extensions]
+    REPLExt = "REPL"
 
 [[deps.PkgVersion]]
 deps = ["Pkg"]
@@ -2126,6 +2145,7 @@ version = "0.5.6"
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+version = "1.11.0"
 
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
@@ -2157,12 +2177,14 @@ version = "2.11.2"
     Enzyme = "7da242da-08ed-463a-9acd-ee780be4f1d9"
 
 [[deps.REPL]]
-deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
+deps = ["InteractiveUtils", "Markdown", "Sockets", "StyledStrings", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
+version = "1.11.0"
 
 [[deps.Random]]
 deps = ["SHA"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+version = "1.11.0"
 
 [[deps.RangeArrays]]
 git-tree-sha1 = "b9039e93773ddcfc828f12aadf7115b4b4d225f5"
@@ -2340,6 +2362,7 @@ version = "1.2.1"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+version = "1.11.0"
 
 [[deps.Setfield]]
 deps = ["ConstructionBase", "Future", "MacroTools", "StaticArraysCore"]
@@ -2356,6 +2379,7 @@ version = "0.5.0"
 [[deps.SharedArrays]]
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
+version = "1.11.0"
 
 [[deps.Showoff]]
 deps = ["Dates", "Grisu"]
@@ -2383,6 +2407,7 @@ version = "0.1.3"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+version = "1.11.0"
 
 [[deps.SortingAlgorithms]]
 deps = ["DataStructures"]
@@ -2393,7 +2418,7 @@ version = "1.2.1"
 [[deps.SparseArrays]]
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
-version = "1.10.0"
+version = "1.11.0"
 
 [[deps.SparseDiffTools]]
 deps = ["ADTypes", "Adapt", "ArrayInterface", "Compat", "DataStructures", "FiniteDiff", "ForwardDiff", "Graphs", "LinearAlgebra", "PackageExtensionCompat", "Random", "Reexport", "SciMLOperators", "Setfield", "SparseArrays", "StaticArrayInterface", "StaticArrays", "UnPack", "VertexSafeGraphs"]
@@ -2477,9 +2502,14 @@ uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
 version = "1.4.3"
 
 [[deps.Statistics]]
-deps = ["LinearAlgebra", "SparseArrays"]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "ae3bb1eb3bba077cd276bc5cfc337cc65c3075c0"
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
-version = "1.10.0"
+version = "1.11.1"
+weakdeps = ["SparseArrays"]
+
+    [deps.Statistics.extensions]
+    SparseArraysExt = ["SparseArrays"]
 
 [[deps.StatsAPI]]
 deps = ["LinearAlgebra"]
@@ -2531,6 +2561,10 @@ version = "0.7.0"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
     StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
+[[deps.StyledStrings]]
+uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
+version = "1.11.0"
+
 [[deps.SuiteSparse]]
 deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
 uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
@@ -2538,7 +2572,7 @@ uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
 [[deps.SuiteSparse_jll]]
 deps = ["Artifacts", "Libdl", "libblastrampoline_jll"]
 uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
-version = "7.2.1+1"
+version = "7.7.0+0"
 
 [[deps.SymbolicIndexingInterface]]
 deps = ["Accessors", "ArrayInterface", "RuntimeGeneratedFunctions", "StaticArraysCore"]
@@ -2554,9 +2588,9 @@ version = "0.2.2"
 
 [[deps.SymbolicUtils]]
 deps = ["AbstractTrees", "ArrayInterface", "Bijections", "ChainRulesCore", "Combinatorics", "ConstructionBase", "DataStructures", "DocStringExtensions", "DynamicPolynomials", "IfElse", "LinearAlgebra", "MultivariatePolynomials", "NaNMath", "Setfield", "SparseArrays", "SpecialFunctions", "StaticArrays", "SymbolicIndexingInterface", "TermInterface", "TimerOutputs", "Unityper", "WeakValueDicts"]
-git-tree-sha1 = "f763a60b5a8781537c8cb3eced0e4018077414d5"
+git-tree-sha1 = "ae5e01353a02661d01514383b653d9de233274ea"
 uuid = "d1185830-fcd6-423d-90d6-eec64667417b"
-version = "3.14.0"
+version = "3.15.0"
 
     [deps.SymbolicUtils.extensions]
     SymbolicUtilsLabelledArraysExt = "LabelledArrays"
@@ -2624,6 +2658,7 @@ version = "2.0.0"
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+version = "1.11.0"
 
 [[deps.TextWrap]]
 git-tree-sha1 = "43044b737fa70bc12f6105061d3da38f881a3e3c"
@@ -2677,6 +2712,7 @@ version = "1.5.1"
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+version = "1.11.0"
 
 [[deps.UnPack]]
 git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
@@ -2685,6 +2721,7 @@ version = "1.0.2"
 
 [[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+version = "1.11.0"
 
 [[deps.UnicodeFun]]
 deps = ["REPL"]
@@ -2894,7 +2931,7 @@ version = "1.5.0+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.52.0+1"
+version = "1.59.0+0"
 
 [[deps.oneTBB_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]

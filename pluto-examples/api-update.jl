@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.20.3
 
 using Markdown
 using InteractiveUtils
@@ -15,6 +15,21 @@ macro bind(def, element)
     end
     #! format: on
 end
+
+# ╔═╡ 4ed0c302-26e4-468a-a40d-0e6406f802d0
+md"""
+# API updates 
+
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/api-updates.jl)
+"""
+
+# ╔═╡ 3e6b4ffa-7b33-4b94-9fd6-75b030d5a115
+md"""
+Here we describe some updates for the API of `VoronoiFVM.jl`. These have been implemented mostly on top of the existing API, whose functionality is not affected.
+"""
+
+# ╔═╡ 7a104243-d3b9-421a-b494-5607c494b106
+TableOfContents(; aside = false, depth = 5)
 
 # ╔═╡ b285aca3-dee5-4b77-9276-537563e8643b
 begin
@@ -36,21 +51,6 @@ begin
         GridVisualize.default_plotter!(CairoMakie)
     end
 end;
-
-# ╔═╡ 4ed0c302-26e4-468a-a40d-0e6406f802d0
-md"""
-# API updates 
-
-[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/api-updates.jl)
-"""
-
-# ╔═╡ 3e6b4ffa-7b33-4b94-9fd6-75b030d5a115
-md"""
-Here we describe some updates for the API of `VoronoiFVM.jl`. These have been implemented mostly on top of the existing API, whose functionality is not affected.
-"""
-
-# ╔═╡ 7a104243-d3b9-421a-b494-5607c494b106
-TableOfContents(; aside = false, depth = 5)
 
 # ╔═╡ a2f1e6ba-80b2-4902-9c5d-2806a7fb16f6
 md"""

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.4
+# v0.20.3
 
 using Markdown
 using InteractiveUtils
@@ -105,14 +105,6 @@ begin
     run_vfvm(m = 2, n = 10) # "Precompile"
 end;
 
-# ╔═╡ 2a8ac57e-486d-4825-95ab-f0402b910dbd
-diffeqmethods = OrderedDict(
-    "Rosenbrock23 (Rosenbrock)" => Rosenbrock23,
-    "QNDF2 (Like matlab's ode15s)" => QNDF2,
-    "FBDF" => FBDF,
-    "Implicit Euler" => ImplicitEuler
-)
-
 # ╔═╡ 9239409b-6de0-4157-8a35-412c909efa96
 begin
     function run_diffeq(; n = 20, m = 2, t0 = 0.001, tend = 0.01, solver = nothing)
@@ -131,6 +123,17 @@ begin
     end
 end;
 
+# ╔═╡ 2a8ac57e-486d-4825-95ab-f0402b910dbd
+diffeqmethods = OrderedDict(
+    "Rosenbrock23 (Rosenbrock)" => Rosenbrock23,
+    "QNDF2 (Like matlab's ode15s)" => QNDF2,
+    "FBDF" => FBDF,
+    "Implicit Euler" => ImplicitEuler
+)
+
+# ╔═╡ 12ab322c-60ae-419f-9334-82f2f7ee7b59
+t1 = @elapsed sol1, sys1, err1 = run_vfvm(m = m, n = n);history_summary(sol1)
+
 # ╔═╡ 3a004ab9-2705-4f5c-8e6e-10d508cc9a1b
 md"""
 method: $(@bind method Select([keys(diffeqmethods)...]))
@@ -138,9 +141,6 @@ method: $(@bind method Select([keys(diffeqmethods)...]))
 
 # ╔═╡ 3e1e62ec-c50a-499e-b516-8478904429c5
 m = 2; n = 50;
-
-# ╔═╡ 12ab322c-60ae-419f-9334-82f2f7ee7b59
-t1 = @elapsed sol1, sys1, err1 = run_vfvm(m = m, n = n);history_summary(sol1)
 
 # ╔═╡ 604898ba-1e8f-4c7c-9711-9958a8351854
 t2 = @elapsed sol2, sys2, err2 = run_diffeq(m = m, n = n, solver = diffeqmethods[method]());history_summary(sol2)
