@@ -58,7 +58,7 @@ function make(;
             "Bernoulli function test" => "bernoulli.jl",
             "API Updates" => "api-update.jl",
         ]
-        ENV["PLUTO_PROJECT"]=@__DIR__
+        ENV["PLUTO_PROJECT"] = @__DIR__
         notebook_examples = @docplutonotebooks(notebookdir, notebooks, iframe = false)
         notebook_examples = vcat(["About the notebooks" => "notebooks.md"], notebook_examples)
         size_threshold_ignore = last.(notebook_examples)
