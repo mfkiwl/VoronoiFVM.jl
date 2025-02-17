@@ -46,9 +46,10 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
     end
 
     if run_notebooks
-        ENV["VORONOIFVM_RUNTESTS"] = "1"
+        # Run the notebooks as scripts in the test environment.
         notebooks = [
             "nbproto.jl",
+            "api-update.jl",
             "ode-diffusion1d.jl",
             "ode-wave1d.jl",
             "ode-nlstorage1d.jl",
@@ -58,7 +59,6 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
             "interfaces1d.jl",
             "problemcase.jl",
             "nonlinear-solvers.jl",
-            "api-update.jl",
             "heterogeneous-catalysis.jl",
         ]
         @testset "Notebooks" begin
@@ -79,12 +79,7 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
         Aqua.test_stale_deps(VoronoiFVM)
         Aqua.test_deps_compat(VoronoiFVM)
         Aqua.test_piracies(VoronoiFVM, broken = true)
-        if VERSION >= v"1.11.0"
-            # Avoid running into https://github.com/SciML/LinearSolve.jl/issues/573
-            Aqua.test_persistent_tasks(VoronoiFVM)
-        else
-            @info "skipping   Aqua.test_persistent_tasks(VoronoiFVM) on Julia 1.10"
-        end
+        Aqua.test_persistent_tasks(VoronoiFVM)
     end
 
     if isdefined(Docs, :undocumented_names) # >=1.11
@@ -95,7 +90,6 @@ function run_all_tests(; run_notebooks = false, notebooksonly = false)
     return nothing
 end
 
-# Don't run notebooks on 1.12: https://github.com/fonsp/Pluto.jl/issues/2939
 if haskey(ENV, "EXAMPLES_ONLY")
     run_all_tests(; run_notebooks = false, notebooksonly = false)
 elseif haskey(ENV, "NOTEBOOKS_ONLY")
