@@ -252,9 +252,6 @@ t3 = checkinout(sys3, sol3)
 # ╔═╡ 0a13160e-de6e-4625-931f-c61a8c8aa132
 @test minimum(sol3[2, :]) ≈ 0.5
 
-# ╔═╡ 5beb3a0d-e57a-4aea-b7a0-59b8ce9ff5ce
-hrule()
-
 # ╔═╡ 60941eaa-1aea-11eb-1277-97b991548781
 
 
@@ -319,6 +316,9 @@ begin
         </style>
     """
 end
+
+# ╔═╡ 5beb3a0d-e57a-4aea-b7a0-59b8ce9ff5ce
+hrule()
 
 # ╔═╡ 86e1fffe-cf70-4d93-8131-153f0e98c94b
 begin

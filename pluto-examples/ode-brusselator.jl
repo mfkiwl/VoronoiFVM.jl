@@ -88,6 +88,14 @@ function bruss_reaction(f, u, node, data)
     return nothing
 end;
 
+# ╔═╡ 7e214c83-9c5c-40a9-8b00-db79dfec9a88
+diffeqmethods = OrderedDict(
+    "Rosenbrock23 (Rosenbrock)" => Rosenbrock23,
+    "QNDF2 (Like matlab's ode15s)" => QNDF2,
+    "FBDF" => FBDF,
+    "Implicit Euler" => ImplicitEuler
+)
+
 # ╔═╡ 95be1da7-5f98-4a15-bd8e-7db1ee324768
 begin
 
@@ -110,13 +118,10 @@ begin
     end
 end
 
-# ╔═╡ 7e214c83-9c5c-40a9-8b00-db79dfec9a88
-diffeqmethods = OrderedDict(
-    "Rosenbrock23 (Rosenbrock)" => Rosenbrock23,
-    "QNDF2 (Like matlab's ode15s)" => QNDF2,
-    "FBDF" => FBDF,
-    "Implicit Euler" => ImplicitEuler
-)
+# ╔═╡ 1462d783-93d3-4ad4-8701-90bde88c7553
+md"""
+dim:$(@bind bruss_dim Scrubbable(1:2,default=1)) ``\;``  method: $(@bind bruss_method Select([keys(diffeqmethods)...])) ``\;`` t: $(@bind t_bruss PlutoUI.Slider(0:bruss_tend/200:bruss_tend,show_value=true,default=bruss_tend))
+"""
 
 # ╔═╡ d48ad585-9d0a-4b7e-a54b-3c76d8a5ca21
 if bruss_dim == 1
@@ -149,11 +154,6 @@ t_run = @elapsed bruss_tsol = ODESolver(bruss_system, inival, diffeqmethods[brus
 
 # ╔═╡ c1da7d8e-2921-4366-91f0-dc8e1834595b
 (t_run = t_run, VoronoiFVM.history_details(bruss_tsol)...)
-
-# ╔═╡ 1462d783-93d3-4ad4-8701-90bde88c7553
-md"""
-dim:$(@bind bruss_dim Scrubbable(1:2,default=1)) ``\;``  method: $(@bind bruss_method Select([keys(diffeqmethods)...])) ``\;`` t: $(@bind t_bruss PlutoUI.Slider(0:bruss_tend/200:bruss_tend,show_value=true,default=bruss_tend))
-"""
 
 # ╔═╡ e7a8aae1-8e7a-4b7d-8ce6-701ea586b89a
 let

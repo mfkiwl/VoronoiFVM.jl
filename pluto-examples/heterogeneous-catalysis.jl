@@ -16,6 +16,15 @@ macro bind(def, element)
     #! format: on
 end
 
+# ╔═╡ f75a3225-c7bf-4031-89c7-a792a592f639
+# Some tricks helping to run the notebook during VoronoiFVM.jl CI
+begin
+    doplots = isdefined(Main, :PlutoRunner)
+    import Pkg as _Pkg
+    haskey(ENV, "PLUTO_PROJECT") && _Pkg.activate(ENV["PLUTO_PROJECT"])
+    using Revise
+end
+
 # ╔═╡ e04d9162-e6ed-4e9f-86ce-51b5175f8103
 begin
     using SciMLBase: ODEProblem, solve
@@ -420,21 +429,6 @@ md"""
 - The free catalyst sites C and  the catalyst coverages CA, CB, CAB2 behave according to:
 """
 
-# ╔═╡ 68a4d03f-a526-4d37-a45e-c951432e20e7
-eqns = equations(odesys);
-
-# ╔═╡ e82f039c-8de5-4f17-9187-3856c1a6aa0b
-eqns[2]
-
-# ╔═╡ 7be71fdc-304e-4801-ac53-b10bef0e7c51
-eqns[3]
-
-# ╔═╡ 0159929e-8086-4a06-8f62-ccfb3b86c308
-eqns[5]
-
-# ╔═╡ 96185f7f-99bc-437d-abdc-d8b21d54a9be
-eqns[6]
-
 # ╔═╡ 1c1afb98-0e9e-40f5-b0d8-fa9d20bbe48a
 md"""
 - Dirichlet boundary conditions at  ``x=1`` :
@@ -479,6 +473,21 @@ end
 
 # ╔═╡ f0501240-75e9-425b-8690-81a8284aef28
 odesys = convert(ODESystem, rnv)
+
+# ╔═╡ 68a4d03f-a526-4d37-a45e-c951432e20e7
+eqns = equations(odesys);
+
+# ╔═╡ e82f039c-8de5-4f17-9187-3856c1a6aa0b
+eqns[2]
+
+# ╔═╡ 7be71fdc-304e-4801-ac53-b10bef0e7c51
+eqns[3]
+
+# ╔═╡ 0159929e-8086-4a06-8f62-ccfb3b86c308
+eqns[5]
+
+# ╔═╡ 96185f7f-99bc-437d-abdc-d8b21d54a9be
+eqns[6]
 
 # ╔═╡ 9d4a18cd-cc31-4606-9511-41e9cc6ca22a
 md"""
@@ -744,15 +753,6 @@ md"""
 ## Appendix
 """
 
-
-# ╔═╡ f75a3225-c7bf-4031-89c7-a792a592f639
-# Some tricks helping to run the notebook during VoronoiFVM.jl CI
-begin
-    doplots = isdefined(Main, :PlutoRunner)
-    import Pkg as _Pkg
-    haskey(ENV, "PLUTO_PROJECT") && _Pkg.activate(ENV["PLUTO_PROJECT"])
-    using Revise
-end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """

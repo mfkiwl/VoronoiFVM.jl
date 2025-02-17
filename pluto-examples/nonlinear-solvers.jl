@@ -4,21 +4,6 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 4ed0c302-26e4-468a-a40d-0e6406f802d0
-md"""
-# Nonlinear solver control
-[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/nonlinear-solvers.jl)
-
-"""
-
-# ╔═╡ eb9ea477-6122-4774-b4a4-04dd7346e2b6
-md"""
-Generally, nonlinear systems in this package  are solved using Newton's method.  In many cases, the default settings provided by this package work well. However, the convergence of Newton's method is only guaranteed with initial values s7ufficiently close to the exact solution. This notebook describes how change the default settings for the solution of nonlinear problems with VoronoiFVM.jl. 
-"""
-
-# ╔═╡ 7a104243-d3b9-421a-b494-5607c494b106
-TableOfContents(; aside = false)
-
 # ╔═╡ b285aca3-dee5-4b77-9276-537563e8643b
 begin
     import Pkg as _Pkg
@@ -36,6 +21,21 @@ begin
         GridVisualize.default_plotter!(CairoMakie)
     end
 end;
+
+# ╔═╡ 4ed0c302-26e4-468a-a40d-0e6406f802d0
+md"""
+# Nonlinear solver control
+[Source](https://github.com/WIAS-PDELib/VoronoiFVM.jl/blob/master/pluto-examples/nonlinear-solvers.jl)
+
+"""
+
+# ╔═╡ eb9ea477-6122-4774-b4a4-04dd7346e2b6
+md"""
+Generally, nonlinear systems in this package  are solved using Newton's method.  In many cases, the default settings provided by this package work well. However, the convergence of Newton's method is only guaranteed with initial values s7ufficiently close to the exact solution. This notebook describes how change the default settings for the solution of nonlinear problems with VoronoiFVM.jl. 
+"""
+
+# ╔═╡ 7a104243-d3b9-421a-b494-5607c494b106
+TableOfContents(; aside = false)
 
 # ╔═╡ 9843b65c-6ca8-4ef8-a896-2c8cec4bff7c
 md"""
