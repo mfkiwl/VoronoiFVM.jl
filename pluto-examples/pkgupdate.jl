@@ -1,12 +1,15 @@
 #!/bin/sh
 # -*-Julia-*-
 #=
-exec julia --startup-file=no --project= "$0" "$@"
+jlversion=""
+if [[ "$1" == "+"* ]] ; then 
+   jlversion=$1
+   shift
+fi
+exec julia $jlversion --startup-file=no "$0" "$@"
 =#
 
 using Pkg
-Pkg.activate(@__DIR__)
-
 using Pluto
 
 notebooks = [
@@ -80,13 +83,13 @@ for notebook in notebooks
 end
 
 
-dirs = ["pluto-examples", "docs"]
-for dir in dirs
-    println("updating $(dir) environment")
-    thisproject = Pkg.project().path
-    Pkg.activate(joinpath(@__DIR__, "..", dir))
-    Pkg.status()
-    Pkg.update()
-    Pkg.status()
-    Pkg.activate(thisproject)
-end
+# dirs = ["pluto-examples"]
+# for dir in dirs
+#     println("updating $(dir) environment")
+#     thisproject = Pkg.project().path
+#     Pkg.activate(joinpath(@__DIR__, "..", dir))
+#     Pkg.status()
+#     Pkg.update()
+#     Pkg.status()
+#     Pkg.activate(thisproject)
+# end
