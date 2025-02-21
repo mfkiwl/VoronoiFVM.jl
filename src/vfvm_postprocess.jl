@@ -63,6 +63,23 @@ function integrate(
 end
 
 """
+    integrate(system,F, Ut; boundary=false, data=system.physics.data)
+
+Integrate transient solution vector region-wise over domain or boundary.
+The result is an `nspec x nregion x nsteps` DiffEqArray.
+"""
+function integrate(
+        system::AbstractSystem,
+        F::Tf, U::AbstractTransientSolution;
+        boundary = false,
+        data = system.physics.data
+    ) where {Tf <: Function}
+    integrals = [integrate(system, F, U.u[i]; boundary, data) for i in 1:length(U.t)]
+    return DiffEqArray(integrals, U.t)
+end
+
+
+"""
     integrate(system,U; boundary=false)
 
 Integrate solution vector region-wise over domain or boundary.

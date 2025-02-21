@@ -94,11 +94,16 @@ end
 """
 $(SIGNATURES)
 
-Calculate test function integral for transient solution.
+Calculate test function integral for two consecutive time steps
 """
 function integrate(
-        system::AbstractSystem, tf, U::AbstractMatrix{Tv},
-        Uold::AbstractMatrix{Tv}, tstep; params = Tv[], data = system.physics.data
+        system::AbstractSystem,
+        tf,
+        U::AbstractMatrix{Tv},
+        Uold::AbstractMatrix{Tv},
+        tstep;
+        params = Tv[],
+        data = system.physics.data
     ) where {Tv}
     grid = system.grid
     nspecies = num_species(system)
@@ -191,8 +196,43 @@ $(SIGNATURES)
 
 Calculate test function integral for steady state solution.
 """
-function integrate(system::AbstractSystem, tf::Vector{Tv}, U::AbstractMatrix{Tu}; kwargs...) where {Tu, Tv}
+function integrate(
+        system::AbstractSystem,
+        tf::Vector{Tv},
+        U::AbstractMatrix{Tu};
+        kwargs...
+    ) where {Tu, Tv}
     return integrate(system, tf, U, U, Inf; kwargs...)
+end
+
+"""
+$(SIGNATURES)
+
+Calculate test function integral for transient solution.
+If `rate=true` (default), calculate the flow rate (per second) 
+through the corresponding bondary. Otherwise, calculate the absolute
+amount.
+"""
+function integrate(
+        sys::AbstractSystem,
+        tf::Vector,
+        U::AbstractTransientSolution;
+        rate = true,
+        kwargs...
+    )
+    nsteps = length(U.t) - 1
+    integral = [
+        VoronoiFVM.integrate(
+                sys,
+                tf,
+                U.u[istep + 1],
+                U.u[istep],
+                U.t[istep + 1] - U.t[istep];
+                kwargs...
+            ) / (rate ? U.t[istep + 1] - U.t[istep] : 1)
+            for istep in 1:nsteps
+    ]
+    return DiffEqArray(integral, U.t[2:end])
 end
 
 ############################################################################

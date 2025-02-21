@@ -43,7 +43,7 @@ using LinearSolve: LinearSolve, KrylovJL_BICGSTAB,
     SparspakFactorization, UMFPACKFactorization, init, reinit!
 using Printf: Printf, @printf, @sprintf
 using Random: Random, AbstractRNG
-using RecursiveArrayTools: RecursiveArrayTools, AbstractDiffEqArray
+using RecursiveArrayTools: RecursiveArrayTools, AbstractDiffEqArray, DiffEqArray
 import RecursiveFactorization
 using SciMLBase: SciMLBase
 using SparseArrays: SparseArrays, SparseMatrixCSC, dropzeros!, nonzeros,
