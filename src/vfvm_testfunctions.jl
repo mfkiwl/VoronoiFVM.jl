@@ -210,7 +210,7 @@ $(SIGNATURES)
 
 Calculate test function integral for transient solution.
 If `rate=true` (default), calculate the flow rate (per second) 
-through the corresponding bondary. Otherwise, calculate the absolute
+through the corresponding boundary. Otherwise, calculate the absolute
 amount.
 """
 function integrate(
