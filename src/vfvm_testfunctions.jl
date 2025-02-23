@@ -94,7 +94,7 @@ end
 """
 $(SIGNATURES)
 
-Calculate test function integral for two consecutive time steps
+Calculate test function integral for two consecutive time steps.
 """
 function integrate(
         system::AbstractSystem,
@@ -192,9 +192,10 @@ end
 
 ############################################################################
 """
-$(SIGNATURES)
+     integrate(system, T, U)
 
-Calculate test function integral for steady state solution.
+Calculate test function integral for steady state solution 
+``\\int_{\\Gamma} T \\vec J_i \\cdot \\vec n ds``.
 """
 function integrate(
         system::AbstractSystem,
@@ -206,12 +207,12 @@ function integrate(
 end
 
 """
-$(SIGNATURES)
+    integrate(system,tf, Ut; rate=true, params, data)
 
 Calculate test function integral for transient solution.
 If `rate=true` (default), calculate the flow rate (per second) 
 through the corresponding boundary. Otherwise, calculate the absolute
-amount.
+amount. The result is a `nspec x (nsteps-1)` DiffEqArray.
 """
 function integrate(
         sys::AbstractSystem,
