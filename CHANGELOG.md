@@ -6,8 +6,13 @@
   - Try to remove type piracies
   - Remove `params` from edge, node structs (apparently never used)
 
-## v2.7 February 6, 2025
+## v2.8 February 23, 2025
+  - Add `integrate` methods for transient solutions returning instances of `DiffEqArray`
+  
+## v2.7 February 18, 2025
   - Allow for LinearSolve v3
+  - Introduce `log_output!` and `print_output!` to control where output goes.
+  - Modifications in test infrastructure
   
 ## v2.6.1 November 27, 2024
   - Allow to calculate node flux reconstruction from general function
