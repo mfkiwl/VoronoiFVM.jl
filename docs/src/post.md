@@ -36,10 +36,9 @@ nodevolumes
 
 ## Solution integrals
 ```@docs
-VoronoiFVM.integrate(system::VoronoiFVM.AbstractSystem, tf::Vector, U::AbstractMatrix; kwargs...)
-VoronoiFVM.integrate(system::VoronoiFVM.AbstractSystem{Tv, Tc, Ti, Tm}, F::Tf, U::AbstractMatrix{Tu}; boundary = false, data = system.physics.data) where {Tu, Tv, Tc, Ti, Tm, Tf}
-VoronoiFVM.integrate(system::VoronoiFVM.AbstractSystem, U::AbstractMatrix; kwargs...)
-VoronoiFVM.integrate(system::VoronoiFVM.AbstractSystem, F, U::AbstractMatrix; boundary, data)
+VoronoiFVM.integrate(::VoronoiFVM.AbstractSystem, ::Any, ::AbstractMatrix{Tu}; boundary, data) where Tu
+VoronoiFVM.integrate(::VoronoiFVM.AbstractSystem, ::Any, ::VoronoiFVM.AbstractTransientSolution; boundary, data)
+VoronoiFVM.integrate(::VoronoiFVM.AbstractSystem, ::AbstractMatrix)
 VoronoiFVM.edgeintegrate
 ```
 

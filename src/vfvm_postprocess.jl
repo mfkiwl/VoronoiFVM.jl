@@ -8,16 +8,20 @@ Base.setindex!(I::SolutionIntegral, v, ispec::Integer, ireg) = I.value[ispec, ir
 
 ################################################################
 """
-    integrate(system,F,U; boundary=false)
+    integrate(system,F,U; boundary=false, data=system.physics.data)
 
 Integrate node function (same signature as reaction or storage)
- `F` of  solution vector region-wise over domain or boundary.
-The result is an `nspec x nregion` matrix.
+ `F` of  solution vector `U` region-wise over domain or boundary.
+The result is an `nspec x nregion` matrix
+``\\int_{\\Omega_j} F_i(U)\\, dx`` or ``\\int_{\\Gamma_j} F_i(U)\\, ds``.
 """
 function integrate(
-        system::AbstractSystem{Tv, Tc, Ti, Tm}, F::Tf, U::AbstractMatrix{Tu};
-        boundary = false, data = system.physics.data
-    ) where {Tu, Tv, Tc, Ti, Tm, Tf}
+        system::AbstractSystem,
+        F,
+        U::AbstractMatrix{Tu};
+        boundary = false,
+        data = system.physics.data
+    ) where {Tu}
     _complete!(system)
     grid = system.grid
     nspecies = num_species(system)
@@ -35,7 +39,7 @@ function integrate(
         for item in nodebatch(system.boundary_assembly_data)
             for ibnode in noderange(system.boundary_assembly_data, item)
                 _fill!(bnode, system.boundary_assembly_data, ibnode, item)
-                res .= zero(Tv)
+                res .= zero(Tu)
                 @views F(rhs(bnode, res), unknowns(bnode, U[:, bnode.index]), bnode, data)
                 asm_res(idof, ispec) = integral[ispec, bnode.region] += bnode.fac * res[ispec]
                 assemble_res(bnode, system, asm_res)
@@ -51,7 +55,7 @@ function integrate(
         for item in nodebatch(system.assembly_data)
             for inode in noderange(system.assembly_data, item)
                 _fill!(node, system.assembly_data, inode, item)
-                res .= zero(Tv)
+                res .= zero(Tu)
                 @views F(rhs(node, res), unknowns(node, U[:, node.index]), node, data)
                 asm_res(idof, ispec) = integral[ispec, node.region] += node.fac * res[ispec]
                 assemble_res(node, system, asm_res)
@@ -63,10 +67,29 @@ function integrate(
 end
 
 """
+    integrate(system,F, Ut; boundary=false, data=system.physics.data)
+
+Integrate transient solution vector region-wise over domain or boundary.
+The result is an `nspec x nregion x nsteps` DiffEqArray
+``\\int_{\\Omega_j} F_i(U_k)\\, dx`` or ``\\int_{\\Gamma_j} F_i(U_k)\\, ds``.
+"""
+function integrate(
+        system::AbstractSystem,
+        F,
+        U::AbstractTransientSolution;
+        boundary = false,
+        data = system.physics.data
+    )
+    integrals = [integrate(system, F, U.u[i]; boundary, data) for i in 1:length(U.t)]
+    return DiffEqArray(integrals, U.t)
+end
+
+"""
     integrate(system,U; boundary=false)
 
 Integrate solution vector region-wise over domain or boundary.
-The result is an `nspec x nregion` matrix.
+The result is an `nspec x nregion ` matrix
+``\\int_{\\Omega_j} U_i\\, dx`` or ``\\int_{\\Gamma_j} U_i\\, ds``.
 """
 function integrate(system::AbstractSystem, U::AbstractMatrix; kwargs...)
     function f(f, u, node, data = nothing)
