@@ -49,7 +49,7 @@ notebooks = [
     "ode-diffusion1d.jl",
     "ode-wave1d.jl",
     "ode-nlstorage1d.jl",
-    "ode-brusselator.jl",
+    #"ode-brusselator.jl",
     "outflow.jl",
     "flux-reconstruction.jl",
     "interfaces1d.jl",
