@@ -193,7 +193,6 @@ function solve_step!(
 end
 
 function evaluate_residual_and_jacobian!(state, u; params = Float64[], t = 0.0, tstep = Inf, embed = 0.0)
-    _initialize_dirichlet!(u, state.system, state.data)
     eval_and_assemble(
         state.system,
         u,
@@ -222,7 +221,7 @@ containing a copy of the linearization at u.
 """
 function evaluate_residual_and_jacobian(sys, u; kwargs...)
     state = SystemState(sys)
-    eval_and_linearize!(state, u; kwargs...)
+    evaluate_residual_and_jacobian!(state, u; kwargs...)
     return copy(state.residual), copy(state.matrix)
 end
 
