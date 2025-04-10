@@ -46,10 +46,6 @@ jobs:
         run: |
           julia -e '
             using Pkg
-            try 
-              Pkg.add(url="https://github.com/jpthiele/PrecompileTools.jl", rev="teh/toplevel")
-            catch
-            end
             Pkg.add(name="DownstreamTester",version="0.1")
             using DownstreamTester
             DownstreamTester.nightly(;nightlylabels=["julia nightly"])'
